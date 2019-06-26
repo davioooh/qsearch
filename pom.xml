@@ -18,6 +18,8 @@
         <junit.version>5.4.2</junit.version>
 <!--        <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>-->
 <!--        <maven-failsafe-plugin.version>2.22.0</maven-failsafe-plugin.version>-->
+        <assertj.version>3.11.1</assertj.version>
+        <mockk.version>1.9.3.kotlin12</mockk.version>
     </properties>
 
     <dependencies>
@@ -26,6 +28,8 @@
             <artifactId>kotlin-stdlib</artifactId>
             <version>${kotlin.version}</version>
         </dependency>
+
+        <!-- test -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test-junit</artifactId>
@@ -42,6 +46,18 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.mockk</groupId>
+            <artifactId>mockk</artifactId>
+            <version>${mockk.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
