@@ -1,8 +1,8 @@
 package com.davioooh.authentication
 
 import com.davioooh.stackoverflow.api.SoAuthApi
-import com.davioooh.utils.join
 import com.davioooh.utils.toBase64Url
+import com.davioooh.utils.toUrl
 import io.javalin.http.Context
 import io.javalin.http.Handler
 import org.eclipse.jetty.http.HttpStatus
@@ -22,7 +22,7 @@ class OAuthRedirectHandler(
         val state = listOf(
             "csrf" to csrf,
             "uri" to ctx.path()
-        ).join().toBase64Url()
+        ).toUrl().toBase64Url()
         ctx.redirect(
             "${SoAuthApi.AUTH_BASE}?" +
                     "client_id=$clientId&" +

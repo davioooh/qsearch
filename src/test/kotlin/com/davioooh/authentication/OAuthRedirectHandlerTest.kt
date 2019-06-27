@@ -1,7 +1,7 @@
 package com.davioooh.authentication
 
-import com.davioooh.utils.join
 import com.davioooh.utils.toBase64Url
+import com.davioooh.utils.toUrl
 import io.javalin.http.Context
 import io.mockk.every
 import io.mockk.mockk
@@ -22,7 +22,7 @@ internal class OAuthRedirectHandlerTest {
         val state = listOf(
             "csrf" to csrf,
             "uri" to uri
-        ).join().toBase64Url()
+        ).toUrl().toBase64Url()
 
         val ctx = mockk<Context>(relaxed = true)
         every { ctx.path() } returns uri

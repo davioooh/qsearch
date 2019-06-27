@@ -5,12 +5,12 @@ import java.net.URLEncoder
 import java.util.*
 
 typealias Parameters = List<Parameter>
-private typealias Parameter = Pair<String, String?>
+typealias Parameter = Pair<String, String?>
 
 //fun Parameters.toUrlFormEncoded(): String =
 //    joinToString("&") { it.first.toFormEncoded() + it.second?.let { "=" + it.toFormEncoded() }.orEmpty() }
 
-fun Parameters.join(): String =
+fun Parameters.toUrl(): String =
     joinToString("&") { it.first + it.second?.let { v -> "=$v" }.orEmpty() }
 
 fun String.toParameters() = if (isNotEmpty()) split("&").map(String::toParameter) else listOf()
