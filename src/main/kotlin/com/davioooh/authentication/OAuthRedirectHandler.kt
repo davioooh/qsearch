@@ -1,5 +1,6 @@
 package com.davioooh.authentication
 
+import com.davioooh.stackoverflow.api.SoAuthApi
 import com.davioooh.utils.join
 import com.davioooh.utils.toBase64Url
 import io.javalin.http.Context
@@ -23,7 +24,7 @@ class OAuthRedirectHandler(
             "uri" to ctx.path()
         ).join().toBase64Url()
         ctx.redirect(
-            "${AUTH_BASE}/oauth?" +
+            "${SoAuthApi.AUTH_BASE}?" +
                     "client_id=$clientId&" +
                     "scope=${scopes.joinToString(",")}&" +
                     "redirect_uri=$redirectUri&" +
