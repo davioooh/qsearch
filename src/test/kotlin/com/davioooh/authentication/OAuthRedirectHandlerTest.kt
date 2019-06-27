@@ -11,7 +11,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.eclipse.jetty.http.HttpStatus
 import org.junit.jupiter.api.Test
 
-class OAuthRedirectHandlerTest {
+internal class OAuthRedirectHandlerTest {
 
     @Test
     fun `request is redirected correctly to SO auth url`() {
