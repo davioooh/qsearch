@@ -24,4 +24,4 @@ internal fun String.toFormEncoded() = URLEncoder.encode(this, "UTF-8")
 
 internal fun String.toBase64Url() = Base64.getUrlEncoder().encodeToString(this.toByteArray()).toFormEncoded()
 
-internal fun String.fromBase64Url() = Base64.getDecoder().decode(this.fromFormEncoded())
+internal fun String.fromBase64Url() = String(Base64.getDecoder().decode(this.fromFormEncoded()))
