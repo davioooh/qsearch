@@ -5,5 +5,5 @@ import io.javalin.http.Context
 
 interface AccessTokenPersistence {
     fun persist(ctx: Context, accessTokenDetails: AccessTokenDetails) // TODO ctx necessario?
-    fun retrieve(ctx: Context): AccessTokenDetails
+    fun retrieve(ctx: Context): AccessTokenDetails?
 }

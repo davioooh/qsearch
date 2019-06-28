@@ -12,4 +12,6 @@ data class AccessTokenDetails(
 ) {
     val isExpired: Boolean =
         if (expires == null) false else date.plusSeconds(expires) < Instant.now()
+
+    val expirationDate: Instant? = expires?.let { date.plusSeconds(it) }
 }
