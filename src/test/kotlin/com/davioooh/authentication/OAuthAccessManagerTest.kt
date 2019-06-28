@@ -14,11 +14,12 @@ import java.time.Instant
 
 internal class OAuthAccessManagerTest {
 
-    private val ctx = mockk<Context>()
+    private val ctx = mockk<Context>(relaxed = true)
     private val reqHandler = mockk<Handler>(relaxed = true)
     private val accessTokenPersistence = mockk<AccessTokenPersistence>(relaxed = true)
     private val oAuthRedirectHandler = mockk<OAuthRedirectHandler>(relaxed = true)
-    private val oAuthAccessManager = OAuthAccessManager(accessTokenPersistence, oAuthRedirectHandler)
+    private val oAuthAccessManager =
+        OAuthAccessManager(accessTokenPersistence, oAuthRedirectHandler, excludedPaths = listOf("/excluded"))
 
 
     @BeforeEach
@@ -64,4 +65,15 @@ internal class OAuthAccessManagerTest {
 
         verify { reqHandler.handle(ctx) }
     }
+
+    @Test
+    fun `when path is contained in excluded list invokes request handler`() {
+        every { ctx.path() } returns "/excluded"
+
+        oAuthAccessManager.manage(reqHandler, ctx, mutableSetOf())
+
+        verify(exactly = 0) { accessTokenPersistence.retrieve(ctx) }
+        verify { reqHandler.handle(ctx) }
+    }
+
 }

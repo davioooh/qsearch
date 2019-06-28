@@ -8,11 +8,17 @@ import org.slf4j.LoggerFactory
 
 class OAuthAccessManager(
     private val accessTokenPersistence: AccessTokenPersistence,
-    private val redirectHandler: OAuthRedirectHandler
+    private val redirectHandler: OAuthRedirectHandler,
+    private val excludedPaths: List<String> = listOf()
 ) : AccessManager {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun manage(handler: Handler, ctx: Context, permittedRoles: MutableSet<Role>) {
+        if (excludedPaths.contains(ctx.path())) {
+            handler.handle(ctx)
+            return
+        }
+
         val tokenDetails = accessTokenPersistence.retrieve(ctx)
 
         when {
