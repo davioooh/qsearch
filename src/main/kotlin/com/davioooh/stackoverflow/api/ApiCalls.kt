@@ -11,7 +11,7 @@ class SoAuthApi(
 
     fun fetchAccessToken(code: String): AccessTokenDetails =
         Fuel.post(
-            "$AUTH_BASE/oauth/access_token/json", listOf(
+            "$AUTH_BASE/access_token/json", listOf(
                 "redirect_uri" to redirectUri,
                 "client_id" to clientId,
                 "client_secret" to clientSecret,
