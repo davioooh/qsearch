@@ -6,7 +6,7 @@ import io.javalin.http.Context
 import io.javalin.http.Handler
 import org.slf4j.LoggerFactory
 
-class SoOAuthAccessManager(
+class OAuthAccessManager(
     private val accessTokenPersistence: AccessTokenPersistence,
     private val redirectHandler: OAuthRedirectHandler
 ) : AccessManager {
