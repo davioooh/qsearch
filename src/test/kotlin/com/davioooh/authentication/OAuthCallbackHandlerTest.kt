@@ -18,6 +18,7 @@ internal class OAuthCallbackHandlerTest {
     private val ctx = mockk<Context>(relaxed = true)
     private val soAuthApi = mockk<SoAuthApi>(relaxed = true)
     private val accessTokenPersistence = mockk<AccessTokenPersistence>(relaxed = true)
+    private val oAuthCallbackHandler = OAuthCallbackHandler(soAuthApi, accessTokenPersistence)
 
     @BeforeEach
     fun init() {
@@ -28,8 +29,7 @@ internal class OAuthCallbackHandlerTest {
     fun `when CRSF in State is null sets HTTP status to 403`() {
         every { ctx.queryParam("state") } returns null
 
-        OAuthCallbackHandler(soAuthApi, accessTokenPersistence)
-            .handle(ctx)
+        oAuthCallbackHandler.handle(ctx)
 
         verify { ctx.queryParam("state") }
         verify { ctx.status(403) }
@@ -40,8 +40,7 @@ internal class OAuthCallbackHandlerTest {
         every { ctx.queryParam("state") } returns listOf(Parameter("csrf", "csrf-code")).toUrl().toBase64Url()
         every { ctx.cookie(CSRF_NAME) } returns "different-code"
 
-        OAuthCallbackHandler(soAuthApi, accessTokenPersistence)
-            .handle(ctx)
+        oAuthCallbackHandler.handle(ctx)
 
         verify { ctx.queryParam("state") }
         verify { ctx.cookie(CSRF_NAME) }
@@ -54,8 +53,7 @@ internal class OAuthCallbackHandlerTest {
         every { ctx.cookie(CSRF_NAME) } returns "csrf-code"
         every { ctx.queryParam("code") } returns null
 
-        OAuthCallbackHandler(soAuthApi, accessTokenPersistence)
-            .handle(ctx)
+        oAuthCallbackHandler.handle(ctx)
 
         verify { ctx.queryParam("code") }
         verify { ctx.status(403) }
@@ -76,7 +74,7 @@ internal class OAuthCallbackHandlerTest {
         val accessTokenDetails = AccessTokenDetails("test-token", 1000)
         every { soAuthApi.fetchAccessToken(code) } returns accessTokenDetails
 
-        OAuthCallbackHandler(soAuthApi, accessTokenPersistence).handle(ctx)
+        oAuthCallbackHandler.handle(ctx)
 
         verify { ctx.queryParam("code") }
         verify { soAuthApi.fetchAccessToken(code) }
