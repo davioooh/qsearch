@@ -7,9 +7,6 @@ import java.util.*
 typealias Parameters = List<Parameter>
 typealias Parameter = Pair<String, String?>
 
-//fun Parameters.toUrlFormEncoded(): String =
-//    joinToString("&") { it.first.toFormEncoded() + it.second?.let { "=" + it.toFormEncoded() }.orEmpty() }
-
 fun Parameters.toUrl(): String =
     joinToString("&") { it.first + it.second?.let { v -> "=$v" }.orEmpty() }
 
