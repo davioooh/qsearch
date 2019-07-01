@@ -2,20 +2,10 @@ package com.davioooh.stackexchange.api
 
 import com.davioooh.stackexchange.api.model.Question
 import com.davioooh.stackexchange.api.model.ResultWrapper
-import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.jackson.responseObject
 
-class QuestionsApi(key: String) {
-    private val httpClient = FuelManager()
-
-    init {
-        httpClient.basePath = API_BASE
-        httpClient.baseParams = listOf(
-            "key" to key,
-            "site" to "stackoverflow",
-            "filter" to "!9Z(-x-Ptf"
-        )
-    }
+class QuestionsApi(conf: ApiClientConfig) {
+    private val httpClient = buildHttpClient(conf)
 
     fun fetchUserFavoriteQuestions(
         accessToken: String, userId: Int? = null,

@@ -22,7 +22,7 @@ class OAuthCallbackHandler(
         }
 
         ctx.queryParam("code")?.let { code ->
-            authApi.fetchAccessToken(code)?.let { tokenDetails ->
+            authApi.fetchAccessToken(code).let { tokenDetails ->
                 val originalUri = state.find { it.first == "uri" }?.second ?: "/"
                 accessTokenPersistence.persist(ctx, tokenDetails)
                 ctx.header("Location", originalUri).status(HttpStatus.TEMPORARY_REDIRECT_307)
