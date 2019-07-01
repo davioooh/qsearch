@@ -1,7 +1,7 @@
 package com.davioooh.authentication
 
-import com.davioooh.stackexchange.api.AccessTokenDetails
 import com.davioooh.stackexchange.api.AuthApi
+import com.davioooh.stackexchange.api.model.AccessTokenDetails
 import com.davioooh.utils.Parameter
 import com.davioooh.utils.toBase64Url
 import com.davioooh.utils.toUrl

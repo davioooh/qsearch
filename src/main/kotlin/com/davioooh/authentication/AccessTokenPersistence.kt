@@ -1,6 +1,6 @@
 package com.davioooh.authentication
 
-import com.davioooh.stackexchange.api.AccessTokenDetails
+import com.davioooh.stackexchange.api.model.AccessTokenDetails
 import io.javalin.http.Context
 
 interface AccessTokenPersistence {

@@ -1,5 +1,6 @@
 package com.davioooh.stackexchange.api
 
+import com.davioooh.stackexchange.api.model.AccessTokenDetails
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.jackson.responseObject
 
