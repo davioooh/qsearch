@@ -17,12 +17,6 @@ class AuthApi(
                 "client_secret" to clientSecret,
                 "code" to code
             )
-        ).responseObject<AccessTokenDetails>().let {
-            val (_, rep, res) = it
-            res.get()
-        }
+        ).responseObject<AccessTokenDetails>().third.get()
 
-    companion object {
-        const val AUTH_BASE = "https://stackoverflow.com/oauth"
-    }
 }
