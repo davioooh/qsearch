@@ -7,7 +7,7 @@ import com.github.kittinunf.fuel.jackson.responseObject
 class UsersApi(conf: ApiClientConfig) {
     private val httpClient = buildHttpClient(conf)
 
-    fun userProfile(accessToken: String): ResultWrapper<User> =
+    fun fetchUserProfile(accessToken: String): ResultWrapper<User> =
         httpClient.get(
             "/me", listOf(
                 "access_token" to accessToken

@@ -28,5 +28,5 @@ data class User(
     @JsonProperty("website_url") var websiteUrl: String? = null,
     @JsonProperty("link") var link: String? = null,
     @JsonProperty("profile_image") var profileImage: String? = null,
-    @JsonProperty("display_name") var displayName: String? = null
+    @JsonProperty("display_name") var displayName: String
 )
