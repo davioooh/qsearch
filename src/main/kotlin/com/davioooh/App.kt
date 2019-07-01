@@ -4,7 +4,9 @@ import com.davioooh.authentication.CookieAccessTokenPersistence
 import com.davioooh.authentication.OAuthAccessManager
 import com.davioooh.authentication.OAuthCallbackHandler
 import com.davioooh.authentication.OAuthRedirectHandler
+import com.davioooh.stackexchange.api.ApiClientConfig
 import com.davioooh.stackexchange.api.AuthApi
+import com.davioooh.stackexchange.api.UsersApi
 import com.davioooh.utils.AesEncryption
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -49,6 +51,7 @@ fun main(args: Array<String>) {
                         System.getProperty("clientSecret"),
                         System.getProperty("redirectUri")
                     ),
+                    UsersApi(ApiClientConfig("stackoverflow", System.getProperty("key"), "!9Z(-x-Ptf")),
                     accessTokenPersistence
                 )
             )
