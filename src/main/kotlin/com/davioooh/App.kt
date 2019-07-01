@@ -4,7 +4,7 @@ import com.davioooh.authentication.CookieAccessTokenPersistence
 import com.davioooh.authentication.OAuthAccessManager
 import com.davioooh.authentication.OAuthCallbackHandler
 import com.davioooh.authentication.OAuthRedirectHandler
-import com.davioooh.stackoverflow.api.SoAuthApi
+import com.davioooh.stackexchange.api.AuthApi
 import com.davioooh.utils.AesEncryption
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -44,7 +44,7 @@ fun main(args: Array<String>) {
             // > auth
             get(
                 "/back", OAuthCallbackHandler(
-                    SoAuthApi(
+                    AuthApi(
                         System.getProperty("clientId"),
                         System.getProperty("clientSecret"),
                         System.getProperty("redirectUri")

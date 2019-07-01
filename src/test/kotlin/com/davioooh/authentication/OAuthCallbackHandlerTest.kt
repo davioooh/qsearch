@@ -1,7 +1,7 @@
 package com.davioooh.authentication
 
-import com.davioooh.stackoverflow.api.AccessTokenDetails
-import com.davioooh.stackoverflow.api.SoAuthApi
+import com.davioooh.stackexchange.api.AccessTokenDetails
+import com.davioooh.stackexchange.api.AuthApi
 import com.davioooh.utils.Parameter
 import com.davioooh.utils.toBase64Url
 import com.davioooh.utils.toUrl
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test
 internal class OAuthCallbackHandlerTest {
 
     private val ctx = mockk<Context>(relaxed = true)
-    private val soAuthApi = mockk<SoAuthApi>(relaxed = true)
+    private val soAuthApi = mockk<AuthApi>(relaxed = true)
     private val accessTokenPersistence = mockk<AccessTokenPersistence>(relaxed = true)
     private val oAuthCallbackHandler = OAuthCallbackHandler(soAuthApi, accessTokenPersistence)
 

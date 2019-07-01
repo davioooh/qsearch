@@ -1,9 +1,9 @@
-package com.davioooh.stackoverflow.api
+package com.davioooh.stackexchange.api
 
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.jackson.responseObject
 
-class SoAuthApi(
+class AuthApi(
     private val clientId: String,
     private val clientSecret: String,
     private val redirectUri: String
@@ -26,5 +26,3 @@ class SoAuthApi(
         const val AUTH_BASE = "https://stackoverflow.com/oauth"
     }
 }
-
-

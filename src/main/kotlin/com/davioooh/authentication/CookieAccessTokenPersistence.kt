@@ -1,6 +1,6 @@
 package com.davioooh.authentication
 
-import com.davioooh.stackoverflow.api.AccessTokenDetails
+import com.davioooh.stackexchange.api.AccessTokenDetails
 import com.davioooh.utils.TokenEncryption
 import com.davioooh.utils.fromFormEncoded
 import com.davioooh.utils.toFormEncoded

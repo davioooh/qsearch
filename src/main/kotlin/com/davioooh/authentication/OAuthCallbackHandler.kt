@@ -1,6 +1,6 @@
 package com.davioooh.authentication
 
-import com.davioooh.stackoverflow.api.SoAuthApi
+import com.davioooh.stackexchange.api.AuthApi
 import com.davioooh.utils.fromBase64Url
 import com.davioooh.utils.toParameters
 import io.javalin.http.Context
@@ -8,7 +8,7 @@ import io.javalin.http.Handler
 import org.eclipse.jetty.http.HttpStatus
 
 class OAuthCallbackHandler(
-    private val soAuthApi: SoAuthApi,
+    private val authApi: AuthApi,
     private val accessTokenPersistence: AccessTokenPersistence
 ) : Handler {
 
@@ -22,7 +22,7 @@ class OAuthCallbackHandler(
         }
 
         ctx.queryParam("code")?.let { code ->
-            soAuthApi.fetchAccessToken(code)?.let { tokenDetails ->
+            authApi.fetchAccessToken(code)?.let { tokenDetails ->
                 val originalUri = state.find { it.first == "uri" }?.second ?: "/"
                 accessTokenPersistence.persist(ctx, tokenDetails)
                 ctx.header("Location", originalUri).status(HttpStatus.TEMPORARY_REDIRECT_307)

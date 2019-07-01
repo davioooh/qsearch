@@ -1,4 +1,4 @@
-package com.davioooh.stackoverflow.api
+package com.davioooh.stackexchange.api
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
