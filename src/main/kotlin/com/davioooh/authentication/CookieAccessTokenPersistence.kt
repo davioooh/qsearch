@@ -7,7 +7,6 @@ import com.davioooh.utils.toFormEncoded
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.javalin.http.Context
-import io.javalin.plugin.openapi.jackson.JacksonToJsonMapper
 
 class CookieAccessTokenPersistence(
     private val objectMapper: ObjectMapper,
@@ -23,7 +22,7 @@ class CookieAccessTokenPersistence(
     override fun retrieve(ctx: Context): AccessTokenDetails? =
         ctx.cookie(COOKIE_NAME)?.let { encodedToken ->
             tokenEncryption.decrypt(encodedToken.fromFormEncoded()).let { decodedToken ->
-                JacksonToJsonMapper.objectMapper.readValue<AccessTokenDetails>(decodedToken)
+                objectMapper.readValue<AccessTokenDetails>(decodedToken)
             }
         }
 

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.Instant
 
-@JsonIgnoreProperties("expired")
+@JsonIgnoreProperties("expired", "expirationDate")
 data class AccessTokenDetails(
     @JsonProperty("access_token") val token: String,
     @JsonProperty("expires") val expires: Long?,
