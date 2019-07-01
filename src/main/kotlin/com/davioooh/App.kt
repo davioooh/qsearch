@@ -6,16 +6,27 @@ import com.davioooh.authentication.OAuthCallbackHandler
 import com.davioooh.authentication.OAuthRedirectHandler
 import com.davioooh.stackoverflow.api.SoAuthApi
 import com.davioooh.utils.AesEncryption
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.get
-import io.javalin.plugin.openapi.jackson.JacksonToJsonMapper.objectMapper
+import io.javalin.plugin.json.JavalinJackson
 
 fun main(args: Array<String>) {
+    val objMapper = ObjectMapper()
+        .registerModule(KotlinModule())
+        .registerModule(JavaTimeModule())
+        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+
     val accessTokenPersistence =
-        CookieAccessTokenPersistence(objectMapper, AesEncryption(System.getProperty("encryptionKey").toByteArray()))
+        CookieAccessTokenPersistence(objMapper, AesEncryption(System.getProperty("encryptionKey").toByteArray()))
 
     Javalin
         .create {
+            JavalinJackson.configure(objMapper)
+
             it.accessManager(
                 OAuthAccessManager(
                     accessTokenPersistence,
