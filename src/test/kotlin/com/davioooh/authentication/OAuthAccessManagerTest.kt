@@ -1,12 +1,14 @@
 package com.davioooh.authentication
 
+import com.davioooh.AuthenticatedUser
+import com.davioooh.AuthenticationInfoHolder
+import com.davioooh.stackexchange.api.UsersApi
 import com.davioooh.stackexchange.api.model.AccessTokenDetails
+import com.davioooh.stackexchange.api.model.ResultWrapper
+import com.davioooh.stackexchange.api.model.User
 import io.javalin.http.Context
 import io.javalin.http.Handler
-import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -17,9 +19,15 @@ internal class OAuthAccessManagerTest {
     private val ctx = mockk<Context>(relaxed = true)
     private val reqHandler = mockk<Handler>(relaxed = true)
     private val accessTokenPersistence = mockk<AccessTokenPersistence>(relaxed = true)
+    private val soUsersApi = mockk<UsersApi>(relaxed = true)
     private val oAuthRedirectHandler = mockk<OAuthRedirectHandler>(relaxed = true)
     private val oAuthAccessManager =
-        OAuthAccessManager(accessTokenPersistence, oAuthRedirectHandler, excludedPaths = listOf("/excluded"))
+        OAuthAccessManager(
+            accessTokenPersistence,
+            soUsersApi,
+            oAuthRedirectHandler,
+            excludedPaths = listOf("/excluded")
+        )
 
 
     @BeforeEach
@@ -61,8 +69,31 @@ internal class OAuthAccessManagerTest {
 
         every { accessTokenPersistence.retrieve(ctx) } returns validAccessTokenDetails
 
+        val username = "User001"
+        val userId = 100
+        every { soUsersApi.fetchUserProfile(validAccessTokenDetails.token) } returns ResultWrapper(
+            items = listOf(
+                User(
+                    displayName = username,
+                    userId = userId
+                )
+            ),
+            hasMore = false,
+            quotaMax = 0,
+            quotaRemaining = 0
+        )
+
+        mockkObject(AuthenticationInfoHolder)
+        every { AuthenticationInfoHolder.authenticatedUser.set(any()) } answers { nothing }
+
         oAuthAccessManager.manage(reqHandler, ctx, mutableSetOf())
 
+        verify { soUsersApi.fetchUserProfile(validAccessTokenDetails.token) }
+        verify {
+            AuthenticationInfoHolder.authenticatedUser.set(
+                AuthenticatedUser(userId, username, validAccessTokenDetails.token)
+            )
+        }
         verify { reqHandler.handle(ctx) }
     }
 

@@ -1,5 +1,8 @@
 package com.davioooh.authentication
 
+import com.davioooh.AuthenticatedUser
+import com.davioooh.AuthenticationInfoHolder
+import com.davioooh.stackexchange.api.UsersApi
 import io.javalin.core.security.AccessManager
 import io.javalin.core.security.Role
 import io.javalin.http.Context
@@ -8,6 +11,7 @@ import org.slf4j.LoggerFactory
 
 class OAuthAccessManager(
     private val accessTokenPersistence: AccessTokenPersistence,
+    private val usersApi: UsersApi,
     private val redirectHandler: OAuthRedirectHandler,
     private val excludedPaths: List<String> = listOf()
 ) : AccessManager {
@@ -30,7 +34,21 @@ class OAuthAccessManager(
                 logger.debug("Retrieved access token is expired: ${tokenDetails.expirationDate}")
                 redirectHandler.handle(ctx)
             }
-            else -> handler.handle(ctx)
+            else -> {
+                // TODO cache user fetching call
+                usersApi.fetchUserProfile(tokenDetails.token).let {
+                    val user = it.items.firstOrNull() ?: throw Exception("Cannot fetch user data")
+                    AuthenticationInfoHolder.authenticatedUser.set(
+                        AuthenticatedUser(
+                            user.userId,
+                            user.displayName,
+                            tokenDetails.token
+                        )
+                    ) // TODO add test
+                }
+
+                handler.handle(ctx)
+            }
         }
     }
 

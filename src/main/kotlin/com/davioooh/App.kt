@@ -32,6 +32,7 @@ fun main(args: Array<String>) {
             it.accessManager(
                 OAuthAccessManager(
                     accessTokenPersistence,
+                    UsersApi(ApiClientConfig("stackoverflow", System.getProperty("key"), "!9Z(-x-Ptf")),
                     OAuthRedirectHandler(
                         System.getProperty("clientId"),
                         System.getProperty("scopes").split(", "),
@@ -51,13 +52,14 @@ fun main(args: Array<String>) {
                         System.getProperty("clientSecret"),
                         System.getProperty("redirectUri")
                     ),
-                    UsersApi(ApiClientConfig("stackoverflow", System.getProperty("key"), "!9Z(-x-Ptf")),
                     accessTokenPersistence
                 )
             )
 
             // >
-            get("/") { it.render("/templates/index.html") }
+            get("/") {
+                it.render("/templates/index.html")
+            }
         }
 }
 
