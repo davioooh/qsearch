@@ -82,13 +82,13 @@ internal class OAuthAccessManagerTest {
         )
 
         mockkObject(AuthenticationInfoHolder)
-        every { AuthenticationInfoHolder.authenticatedUser.set(any()) } answers { nothing }
+        every { AuthenticationInfoHolder.setCurrentUser(any()) } answers { nothing }
 
         oAuthAccessManager.manage(reqHandler, ctx, mutableSetOf())
 
         verify { soUsersApi.fetchUserProfile(validAccessTokenDetails.token) }
         verify {
-            AuthenticationInfoHolder.authenticatedUser.set(
+            AuthenticationInfoHolder.setCurrentUser(
                 AuthenticatedUser(userId, username, validAccessTokenDetails.token)
             )
         }

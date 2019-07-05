@@ -36,7 +36,7 @@ class OAuthAccessManager(
                 // TODO cache user fetching call
                 usersApi.fetchUserProfile(tokenDetails.token).let {
                     val user = it.items.firstOrNull() ?: throw Exception("Cannot fetch user data")
-                    AuthenticationInfoHolder.authenticatedUser.set(
+                    AuthenticationInfoHolder.setCurrentUser(
                         AuthenticatedUser(
                             user.userId,
                             user.displayName,

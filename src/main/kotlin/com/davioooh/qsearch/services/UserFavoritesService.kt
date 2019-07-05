@@ -27,7 +27,7 @@ class UserFavoritesService(
         do {
             val res =
                 questionsApi.fetchUserFavoriteQuestions(
-                    accessToken = AuthenticationInfoHolder.authenticatedUser.get().accessToken,
+                    accessToken = AuthenticationInfoHolder.currentUser.accessToken,
                     userId = userId,
                     page = i,
                     pageSize = 100
