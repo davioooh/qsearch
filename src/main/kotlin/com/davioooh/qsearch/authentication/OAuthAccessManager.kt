@@ -42,7 +42,9 @@ class OAuthAccessManager(
                             user.displayName,
                             tokenDetails.token
                         )
-                    ) // TODO add test
+                    )
+
+                    logger.debug("User ${user.displayName}(${user.userId}) retrieved correctly")
                 }
 
                 handler.handle(ctx)
