@@ -1,4 +1,4 @@
-package com.davioooh.stackexchange.api.model
+package com.davioooh.qsearch.stackexchange.api.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty

@@ -1,7 +1,7 @@
-package com.davioooh.stackexchange.api
+package com.davioooh.qsearch.stackexchange.api
 
-import com.davioooh.stackexchange.api.model.ResultWrapper
-import com.davioooh.stackexchange.api.model.User
+import com.davioooh.qsearch.stackexchange.api.model.ResultWrapper
+import com.davioooh.qsearch.stackexchange.api.model.User
 import com.github.kittinunf.fuel.jackson.responseObject
 
 class UsersApi(conf: ApiClientConfig) {

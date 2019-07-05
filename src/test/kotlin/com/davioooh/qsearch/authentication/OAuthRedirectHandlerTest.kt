@@ -1,7 +1,7 @@
-package com.davioooh.authentication
+package com.davioooh.qsearch.authentication
 
-import com.davioooh.utils.toBase64Url
-import com.davioooh.utils.toUrl
+import com.davioooh.qsearch.utils.toBase64Url
+import com.davioooh.qsearch.utils.toUrl
 import io.javalin.http.Context
 import io.mockk.every
 import io.mockk.mockk

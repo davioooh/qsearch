@@ -1,8 +1,8 @@
-package com.davioooh.authentication
+package com.davioooh.qsearch.authentication
 
-import com.davioooh.stackexchange.api.AuthApi
-import com.davioooh.utils.fromBase64Url
-import com.davioooh.utils.toParameters
+import com.davioooh.qsearch.stackexchange.api.AuthApi
+import com.davioooh.qsearch.utils.fromBase64Url
+import com.davioooh.qsearch.utils.toParameters
 import io.javalin.http.Context
 import io.javalin.http.Handler
 import org.eclipse.jetty.http.HttpStatus

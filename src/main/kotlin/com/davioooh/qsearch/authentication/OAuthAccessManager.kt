@@ -1,8 +1,6 @@
-package com.davioooh.authentication
+package com.davioooh.qsearch.authentication
 
-import com.davioooh.AuthenticatedUser
-import com.davioooh.AuthenticationInfoHolder
-import com.davioooh.stackexchange.api.UsersApi
+import com.davioooh.qsearch.stackexchange.api.UsersApi
 import io.javalin.core.security.AccessManager
 import io.javalin.core.security.Role
 import io.javalin.http.Context

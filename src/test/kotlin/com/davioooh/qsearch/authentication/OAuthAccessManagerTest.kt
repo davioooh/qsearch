@@ -1,11 +1,9 @@
-package com.davioooh.authentication
+package com.davioooh.qsearch.authentication
 
-import com.davioooh.AuthenticatedUser
-import com.davioooh.AuthenticationInfoHolder
-import com.davioooh.stackexchange.api.UsersApi
-import com.davioooh.stackexchange.api.model.AccessTokenDetails
-import com.davioooh.stackexchange.api.model.ResultWrapper
-import com.davioooh.stackexchange.api.model.User
+import com.davioooh.qsearch.stackexchange.api.UsersApi
+import com.davioooh.qsearch.stackexchange.api.model.AccessTokenDetails
+import com.davioooh.qsearch.stackexchange.api.model.ResultWrapper
+import com.davioooh.qsearch.stackexchange.api.model.User
 import io.javalin.http.Context
 import io.javalin.http.Handler
 import io.mockk.*

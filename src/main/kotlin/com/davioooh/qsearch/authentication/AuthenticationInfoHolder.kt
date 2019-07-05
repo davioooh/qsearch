@@ -1,4 +1,4 @@
-package com.davioooh
+package com.davioooh.qsearch.authentication
 
 object AuthenticationInfoHolder {
     val authenticatedUser = ThreadLocal<AuthenticatedUser>()

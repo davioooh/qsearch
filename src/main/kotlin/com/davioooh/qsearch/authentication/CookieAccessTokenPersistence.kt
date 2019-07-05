@@ -1,9 +1,9 @@
-package com.davioooh.authentication
+package com.davioooh.qsearch.authentication
 
-import com.davioooh.stackexchange.api.model.AccessTokenDetails
-import com.davioooh.utils.TokenEncryption
-import com.davioooh.utils.fromFormEncoded
-import com.davioooh.utils.toFormEncoded
+import com.davioooh.qsearch.stackexchange.api.model.AccessTokenDetails
+import com.davioooh.qsearch.utils.TokenEncryption
+import com.davioooh.qsearch.utils.fromFormEncoded
+import com.davioooh.qsearch.utils.toFormEncoded
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.javalin.http.Context

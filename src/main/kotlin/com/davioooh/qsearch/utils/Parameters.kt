@@ -1,4 +1,4 @@
-package com.davioooh.utils
+package com.davioooh.qsearch.utils
 
 import java.net.URLDecoder
 import java.net.URLEncoder

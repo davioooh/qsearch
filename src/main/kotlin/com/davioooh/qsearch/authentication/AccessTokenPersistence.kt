@@ -1,6 +1,6 @@
-package com.davioooh.authentication
+package com.davioooh.qsearch.authentication
 
-import com.davioooh.stackexchange.api.model.AccessTokenDetails
+import com.davioooh.qsearch.stackexchange.api.model.AccessTokenDetails
 import io.javalin.http.Context
 
 interface AccessTokenPersistence {

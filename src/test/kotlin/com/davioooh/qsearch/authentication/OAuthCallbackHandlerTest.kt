@@ -1,10 +1,10 @@
-package com.davioooh.authentication
+package com.davioooh.qsearch.authentication
 
-import com.davioooh.stackexchange.api.AuthApi
-import com.davioooh.stackexchange.api.model.AccessTokenDetails
-import com.davioooh.utils.Parameter
-import com.davioooh.utils.toBase64Url
-import com.davioooh.utils.toUrl
+import com.davioooh.qsearch.stackexchange.api.AuthApi
+import com.davioooh.qsearch.stackexchange.api.model.AccessTokenDetails
+import com.davioooh.qsearch.utils.Parameter
+import com.davioooh.qsearch.utils.toBase64Url
+import com.davioooh.qsearch.utils.toUrl
 import io.javalin.http.Context
 import io.mockk.clearAllMocks
 import io.mockk.every

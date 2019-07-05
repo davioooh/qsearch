@@ -1,13 +1,13 @@
-package com.davioooh
+package com.davioooh.qsearch
 
-import com.davioooh.authentication.CookieAccessTokenPersistence
-import com.davioooh.authentication.OAuthAccessManager
-import com.davioooh.authentication.OAuthCallbackHandler
-import com.davioooh.authentication.OAuthRedirectHandler
-import com.davioooh.stackexchange.api.ApiClientConfig
-import com.davioooh.stackexchange.api.AuthApi
-import com.davioooh.stackexchange.api.UsersApi
-import com.davioooh.utils.AesEncryption
+import com.davioooh.qsearch.authentication.CookieAccessTokenPersistence
+import com.davioooh.qsearch.authentication.OAuthAccessManager
+import com.davioooh.qsearch.authentication.OAuthCallbackHandler
+import com.davioooh.qsearch.authentication.OAuthRedirectHandler
+import com.davioooh.qsearch.stackexchange.api.ApiClientConfig
+import com.davioooh.qsearch.stackexchange.api.AuthApi
+import com.davioooh.qsearch.stackexchange.api.UsersApi
+import com.davioooh.qsearch.utils.AesEncryption
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -23,7 +23,10 @@ fun main(args: Array<String>) {
         .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 
     val accessTokenPersistence =
-        CookieAccessTokenPersistence(objMapper, AesEncryption(System.getProperty("encryptionKey").toByteArray()))
+        CookieAccessTokenPersistence(
+            objMapper,
+            AesEncryption(System.getProperty("encryptionKey").toByteArray())
+        )
 
     Javalin
         .create {
@@ -32,7 +35,13 @@ fun main(args: Array<String>) {
             it.accessManager(
                 OAuthAccessManager(
                     accessTokenPersistence,
-                    UsersApi(ApiClientConfig("stackoverflow", System.getProperty("key"), "!9Z(-x-Ptf")),
+                    UsersApi(
+                        ApiClientConfig(
+                            "stackoverflow",
+                            System.getProperty("key"),
+                            "!9Z(-x-Ptf"
+                        )
+                    ),
                     OAuthRedirectHandler(
                         System.getProperty("clientId"),
                         System.getProperty("scopes").split(", "),

@@ -1,4 +1,4 @@
-package com.davioooh.stackexchange.api
+package com.davioooh.qsearch.stackexchange.api
 
 import com.github.kittinunf.fuel.core.FuelManager
 

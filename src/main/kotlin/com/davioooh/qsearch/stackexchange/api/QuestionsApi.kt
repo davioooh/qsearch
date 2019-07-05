@@ -1,7 +1,7 @@
-package com.davioooh.stackexchange.api
+package com.davioooh.qsearch.stackexchange.api
 
-import com.davioooh.stackexchange.api.model.Question
-import com.davioooh.stackexchange.api.model.ResultWrapper
+import com.davioooh.qsearch.stackexchange.api.model.Question
+import com.davioooh.qsearch.stackexchange.api.model.ResultWrapper
 import com.github.kittinunf.fuel.jackson.responseObject
 
 class QuestionsApi(conf: ApiClientConfig) {

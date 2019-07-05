@@ -1,4 +1,4 @@
-package com.davioooh.utils
+package com.davioooh.qsearch.utils
 
 import java.security.Key
 import java.util.*
