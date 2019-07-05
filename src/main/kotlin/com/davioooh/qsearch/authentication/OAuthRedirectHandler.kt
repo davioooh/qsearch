@@ -13,12 +13,13 @@ class OAuthRedirectHandler(
     private val clientId: String,
     private val scopes: List<String>,
     private val redirectUri: String,
+    private val csrfPersistence: CsrfPersistence,
     private val csrfGenerator: () -> String = { BigInteger(130, SecureRandom()).toString(32) }
 ) : Handler {
 
     override fun handle(ctx: Context) {
         val csrf = csrfGenerator()
-        ctx.cookie(CSRF_NAME, csrf) // TODO estrarre logica di persistenza csrf?
+        csrfPersistence.persist(ctx, csrf)
         val state = listOf(
             "csrf" to csrf,
             "uri" to ctx.path()

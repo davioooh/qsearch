@@ -1,9 +1,6 @@
 package com.davioooh.qsearch
 
-import com.davioooh.qsearch.authentication.CookieAccessTokenPersistence
-import com.davioooh.qsearch.authentication.OAuthAccessManager
-import com.davioooh.qsearch.authentication.OAuthCallbackHandler
-import com.davioooh.qsearch.authentication.OAuthRedirectHandler
+import com.davioooh.qsearch.authentication.*
 import com.davioooh.qsearch.stackexchange.api.ApiClientConfig
 import com.davioooh.qsearch.stackexchange.api.AuthApi
 import com.davioooh.qsearch.stackexchange.api.UsersApi
@@ -21,6 +18,8 @@ fun main(args: Array<String>) {
         .registerModule(KotlinModule())
         .registerModule(JavaTimeModule())
         .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+
+    val csrfPersistence = CookieCsrfPersistence()
 
     val accessTokenPersistence =
         CookieAccessTokenPersistence(
@@ -45,7 +44,8 @@ fun main(args: Array<String>) {
                     OAuthRedirectHandler(
                         System.getProperty("clientId"),
                         System.getProperty("scopes").split(", "),
-                        System.getProperty("redirectUri")
+                        System.getProperty("redirectUri"),
+                        csrfPersistence
                     ),
                     excludedPaths = listOf("/back")
                 )
@@ -61,6 +61,7 @@ fun main(args: Array<String>) {
                         System.getProperty("clientSecret"),
                         System.getProperty("redirectUri")
                     ),
+                    csrfPersistence,
                     accessTokenPersistence
                 )
             )

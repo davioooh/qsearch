@@ -27,12 +27,15 @@ internal class OAuthRedirectHandlerTest {
         val ctx = mockk<Context>(relaxed = true)
         every { ctx.path() } returns uri
 
+        val csrfPersistence = mockk<CsrfPersistence>(relaxed = true)
+
         val slot = slot<String>()
         every { ctx.redirect(capture(slot), HttpStatus.TEMPORARY_REDIRECT_307) } answers { nothing }
 
-        OAuthRedirectHandler(clientId, listOf(), redirectUri) { csrf }
+        OAuthRedirectHandler(clientId, listOf(), redirectUri, csrfPersistence) { csrf }
             .handle(ctx)
 
+        verify { csrfPersistence.persist(ctx, csrf) }
         verify { ctx.redirect(any(), HttpStatus.TEMPORARY_REDIRECT_307) }
 
         assertThat(slot.captured).isEqualTo(

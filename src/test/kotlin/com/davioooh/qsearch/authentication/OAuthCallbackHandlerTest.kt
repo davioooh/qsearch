@@ -17,8 +17,9 @@ internal class OAuthCallbackHandlerTest {
 
     private val ctx = mockk<Context>(relaxed = true)
     private val soAuthApi = mockk<AuthApi>(relaxed = true)
+    private val csrfPersistence = mockk<CsrfPersistence>(relaxed = true)
     private val accessTokenPersistence = mockk<AccessTokenPersistence>(relaxed = true)
-    private val oAuthCallbackHandler = OAuthCallbackHandler(soAuthApi, accessTokenPersistence)
+    private val oAuthCallbackHandler = OAuthCallbackHandler(soAuthApi, csrfPersistence, accessTokenPersistence)
 
     @BeforeEach
     fun init() {
@@ -38,19 +39,19 @@ internal class OAuthCallbackHandlerTest {
     @Test
     fun `when CRSF in State does not match persisted CRSF sets HTTP status to 403`() {
         every { ctx.queryParam("state") } returns listOf(Parameter("csrf", "csrf-code")).toUrl().toBase64Url()
-        every { ctx.cookie(CSRF_NAME) } returns "different-code"
+        every { csrfPersistence.retrieve(ctx) } returns "different-code"
 
         oAuthCallbackHandler.handle(ctx)
 
         verify { ctx.queryParam("state") }
-        verify { ctx.cookie(CSRF_NAME) }
+        verify { csrfPersistence.retrieve(ctx) }
         verify { ctx.status(403) }
     }
 
     @Test
     fun `when Code param is null sets HTTP status to 403`() {
         every { ctx.queryParam("state") } returns listOf(Parameter("csrf", "csrf-code")).toUrl().toBase64Url()
-        every { ctx.cookie(CSRF_NAME) } returns "csrf-code"
+        every { csrfPersistence.retrieve(ctx) } returns "csrf-code"
         every { ctx.queryParam("code") } returns null
 
         oAuthCallbackHandler.handle(ctx)
@@ -68,7 +69,7 @@ internal class OAuthCallbackHandlerTest {
             Parameter("csrf", csrf),
             Parameter("uri", "/original-url")
         ).toUrl().toBase64Url()
-        every { ctx.cookie(CSRF_NAME) } returns csrf
+        every { csrfPersistence.retrieve(ctx) } returns csrf
         every { ctx.queryParam("code") } returns code
 
         val accessTokenDetails = AccessTokenDetails("test-token", 1000)

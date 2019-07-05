@@ -9,6 +9,7 @@ import org.eclipse.jetty.http.HttpStatus
 
 class OAuthCallbackHandler(
     private val authApi: AuthApi,
+    private val csrfPersistence: CsrfPersistence,
     private val accessTokenPersistence: AccessTokenPersistence
 ) : Handler {
 
@@ -16,7 +17,7 @@ class OAuthCallbackHandler(
         val state = ctx.queryParam("state")?.fromBase64Url()?.toParameters() ?: emptyList()
         val csrfInState = state.find { it.first == "csrf" }?.second
 
-        if (csrfInState == null || csrfInState != ctx.cookie(CSRF_NAME)) {
+        if (csrfInState == null || csrfInState != csrfPersistence.retrieve(ctx)) {
             ctx.status(HttpStatus.FORBIDDEN_403)
             return
         }
