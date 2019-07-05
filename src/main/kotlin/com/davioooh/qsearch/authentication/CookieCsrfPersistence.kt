@@ -13,4 +13,5 @@ class CookieCsrfPersistence : CsrfPersistence {
     companion object {
         const val CSRF_COOKIE_NAME = "so_at"
     }
+
 }

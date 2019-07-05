@@ -14,20 +14,20 @@ class CookieAccessTokenPersistence(
 ) : AccessTokenPersistence {
     override fun persist(ctx: Context, accessTokenDetails: AccessTokenDetails) {
         ctx.cookie(
-            COOKIE_NAME,
+            ACCESS_TOKEN_COOKIE_NAME,
             tokenEncryption.encrypt(objectMapper.writeValueAsString(accessTokenDetails)).toFormEncoded()
         )
     }
 
     override fun retrieve(ctx: Context): AccessTokenDetails? =
-        ctx.cookie(COOKIE_NAME)?.let { encodedToken ->
+        ctx.cookie(ACCESS_TOKEN_COOKIE_NAME)?.let { encodedToken ->
             tokenEncryption.decrypt(encodedToken.fromFormEncoded()).let { decodedToken ->
                 objectMapper.readValue<AccessTokenDetails>(decodedToken)
             }
         }
 
     companion object {
-        const val COOKIE_NAME = "so_at"
+        const val ACCESS_TOKEN_COOKIE_NAME = "so_at"
     }
 
 }
