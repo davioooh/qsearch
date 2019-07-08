@@ -1,9 +1,7 @@
 package com.davioooh.qsearch.authentication
 
 import com.davioooh.qsearch.stackexchange.api.UsersApi
-import com.davioooh.qsearch.stackexchange.api.model.AccessTokenDetails
 import com.davioooh.qsearch.stackexchange.api.model.ResultWrapper
-import com.davioooh.qsearch.stackexchange.api.model.User
 import io.javalin.http.Context
 import io.javalin.http.Handler
 import io.mockk.*
@@ -44,10 +42,8 @@ internal class OAuthAccessManagerTest {
 
     @Test
     fun `when access token is expired invokes redirect handler`() {
-        val expiredAccessTokenDetails = AccessTokenDetails(
-            "test-token",
-            1,
-            Instant.now().minusSeconds(3600)
+        val expiredAccessTokenDetails = accessToken(
+            date = Instant.now().minusSeconds(3600)
         )
 
         every { accessTokenPersistence.retrieve(ctx) } returns expiredAccessTokenDetails
@@ -60,22 +56,12 @@ internal class OAuthAccessManagerTest {
 
     @Test
     fun `when access token found invokes request handler`() {
-        val validAccessTokenDetails = AccessTokenDetails(
-            "test-token",
-            1000
-        )
+        val validAccessTokenDetails = accessToken()
 
         every { accessTokenPersistence.retrieve(ctx) } returns validAccessTokenDetails
 
-        val username = "User001"
-        val userId = 100
         every { soUsersApi.fetchUserProfile(validAccessTokenDetails.token) } returns ResultWrapper(
-            items = listOf(
-                User(
-                    displayName = username,
-                    userId = userId
-                )
-            ),
+            items = listOf(soUser()),
             hasMore = false,
             quotaMax = 0,
             quotaRemaining = 0
@@ -88,9 +74,7 @@ internal class OAuthAccessManagerTest {
 
         verify { soUsersApi.fetchUserProfile(validAccessTokenDetails.token) }
         verify {
-            AuthenticationInfoHolder.setCurrentUser(
-                AuthenticatedUser(userId, username, validAccessTokenDetails.token)
-            )
+            AuthenticationInfoHolder.setCurrentUser(authenticatedUser())
         }
         verify { reqHandler.handle(ctx) }
     }

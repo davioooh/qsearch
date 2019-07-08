@@ -1,7 +1,6 @@
 package com.davioooh.qsearch.authentication
 
 import com.davioooh.qsearch.stackexchange.api.AuthApi
-import com.davioooh.qsearch.stackexchange.api.model.AccessTokenDetails
 import com.davioooh.qsearch.utils.Parameter
 import com.davioooh.qsearch.utils.toBase64Url
 import com.davioooh.qsearch.utils.toUrl
@@ -72,7 +71,7 @@ internal class OAuthCallbackHandlerTest {
         every { csrfPersistence.retrieve(ctx) } returns csrf
         every { ctx.queryParam("code") } returns code
 
-        val accessTokenDetails = AccessTokenDetails("test-token", 1000)
+        val accessTokenDetails = accessToken()
         every { soAuthApi.fetchAccessToken(code) } returns accessTokenDetails
 
         oAuthCallbackHandler.handle(ctx)

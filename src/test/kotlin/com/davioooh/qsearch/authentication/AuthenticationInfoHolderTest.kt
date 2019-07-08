@@ -17,7 +17,7 @@ internal class AuthenticationInfoHolderTest {
     @Test
     fun `when current user is set returns it`() {
         Thread(Runnable {
-            val authenticatedUser = AuthenticatedUser(10, "test-user", "test-token")
+            val authenticatedUser = authenticatedUser()
             AuthenticationInfoHolder.setCurrentUser(authenticatedUser)
 
             val currentUser = AuthenticationInfoHolder.currentUser
