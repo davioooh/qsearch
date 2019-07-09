@@ -27,6 +27,27 @@ fun main(args: Array<String>) {
             AesEncryption(System.getProperty("encryptionKey").toByteArray())
         )
 
+    val usersApi = UsersApi(
+        ApiClientConfig(
+            "stackoverflow",
+            System.getProperty("key"),
+            "!9Z(-x-Ptf"
+        )
+    )
+
+    val authApi = AuthApi(
+        System.getProperty("clientId"),
+        System.getProperty("clientSecret"),
+        System.getProperty("redirectUri")
+    )
+
+    val oAuthRedirectHandler = OAuthRedirectHandler(
+        System.getProperty("clientId"),
+        System.getProperty("scopes").split(", "),
+        System.getProperty("redirectUri"),
+        csrfPersistence
+    )
+
     Javalin
         .create {
             JavalinJackson.configure(objMapper)
@@ -34,19 +55,8 @@ fun main(args: Array<String>) {
             it.accessManager(
                 OAuthAccessManager(
                     accessTokenPersistence,
-                    UsersApi(
-                        ApiClientConfig(
-                            "stackoverflow",
-                            System.getProperty("key"),
-                            "!9Z(-x-Ptf"
-                        )
-                    ),
-                    OAuthRedirectHandler(
-                        System.getProperty("clientId"),
-                        System.getProperty("scopes").split(", "),
-                        System.getProperty("redirectUri"),
-                        csrfPersistence
-                    ),
+                    usersApi,
+                    oAuthRedirectHandler,
                     excludedPaths = listOf("/back")
                 )
             )
@@ -54,17 +64,7 @@ fun main(args: Array<String>) {
         .start()
         .routes {
             // > auth
-            get(
-                "/back", OAuthCallbackHandler(
-                    AuthApi(
-                        System.getProperty("clientId"),
-                        System.getProperty("clientSecret"),
-                        System.getProperty("redirectUri")
-                    ),
-                    csrfPersistence,
-                    accessTokenPersistence
-                )
-            )
+            get("/back", OAuthCallbackHandler(authApi, csrfPersistence, accessTokenPersistence))
 
             // >
             get("/") {
