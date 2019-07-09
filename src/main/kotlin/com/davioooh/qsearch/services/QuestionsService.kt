@@ -20,7 +20,7 @@ class QuestionsService(
         pageSize: Int,
         sortingCriteria: SortingCriteria = Activity,
         sortingDirection: SortingDirection = Asc
-    ): PageableResult<Question>? {
+    ): PageableResult<Question> {
         val questions = mutableListOf<Question>()
         var i = 1
         do {
