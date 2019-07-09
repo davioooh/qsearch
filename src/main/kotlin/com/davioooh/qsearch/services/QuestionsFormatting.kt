@@ -1,16 +1,15 @@
 package com.davioooh.qsearch.services
 
-import com.davioooh.qsearch.stackexchange.api.model.Question
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.*
 
-val Question.answerCountNice: String
-    get() = this.answerCount.toNiceString()
-val Question.viewCountNice: String
-    get() = this.viewCount.toNiceString()
-val Question.scoreNice: String
-    get() = this.score.toNiceString()
+//val Question.answerCountNice: String
+//    get() = this.answerCount.toNiceString()
+//val Question.viewCountNice: String
+//    get() = this.viewCount.toNiceString()
+//val Question.scoreNice: String
+//    get() = this.score.toNiceString()
 
 val questionsDecimalFormat = DecimalFormat("#.#", DecimalFormatSymbols(Locale.US))
 
