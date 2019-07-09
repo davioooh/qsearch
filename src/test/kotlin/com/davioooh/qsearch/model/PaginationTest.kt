@@ -14,25 +14,29 @@ internal class PaginationTest {
         @Test
         fun `when page is less than 0 throws an exception`() {
             Assertions.assertThatExceptionOfType(IllegalArgumentException::class.java)
-                .isThrownBy { paginate(listOf<String>(), -1, 25) }
+                .isThrownBy { paginate(itemsList, -1, 25) }
+                .withMessage("page must be greater than 0")
         }
 
         @Test
         fun `when page is 0 throws an exception`() {
             Assertions.assertThatExceptionOfType(IllegalArgumentException::class.java)
-                .isThrownBy { paginate(listOf<String>(), 0, 25) }
+                .isThrownBy { paginate(itemsList, 0, 25) }
+                .withMessage("page must be greater than 0")
         }
 
         @Test
         fun `when pageSize is less than 0 throws an exception`() {
             Assertions.assertThatExceptionOfType(IllegalArgumentException::class.java)
-                .isThrownBy { paginate(listOf<String>(), 1, -1) }
+                .isThrownBy { paginate(itemsList, 1, -1) }
+                .withMessage("pageSize must be greater than 0")
         }
 
         @Test
         fun `when pageSize is 0 throws an exception`() {
             Assertions.assertThatExceptionOfType(IllegalArgumentException::class.java)
-                .isThrownBy { paginate(listOf<String>(), 0, 0) }
+                .isThrownBy { paginate(itemsList, 1, 0) }
+                .withMessage("pageSize must be greater than 0")
         }
 
         @Test
@@ -42,6 +46,13 @@ internal class PaginationTest {
             Assertions.assertThatExceptionOfType(IllegalArgumentException::class.java)
                 .isThrownBy { paginate(itemsList, 2, 10) }
                 .withMessage("page can't be greater than $expectedLastPage")
+        }
+
+        @Test
+        fun `when items is empty throws an exception`() {
+            Assertions.assertThatExceptionOfType(IllegalArgumentException::class.java)
+                .isThrownBy { paginate(listOf<Any>(), 2, 10) }
+                .withMessage("items can't be an empty list")
         }
 
         @Test
