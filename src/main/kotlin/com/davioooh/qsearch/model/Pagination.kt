@@ -10,8 +10,9 @@ data class PageableResult<T>(
     @JsonProperty("total") val total: Int
 )
 
-fun <T> paginate(items: List<T>, page: Int, pageSize: Int): PageableResult<T>? {
+fun <T> paginate(items: List<T>, page: Int, pageSize: Int): PageableResult<T> {
     require(page > 0) { "page must be greater than 0" }
+    require(items.isNotEmpty()) { "items can't be an empty list" }
     val lastPage = calculateLastPage(items, pageSize)
     require(page <= lastPage) { "page can't be greater than $lastPage" }
     require(pageSize > 0) { "pageSize must be greater than 0" }

@@ -56,9 +56,7 @@ internal class PaginationTest {
             val result = paginate(itemsList, 2, 3)
 
             assertThat(result).isNotNull()
-            if (result != null) {
-                assertThat(result).isEqualTo(expectedResult)
-            }
+            assertThat(result).isEqualTo(expectedResult)
         }
     }
 
