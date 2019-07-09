@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<nav th:fragment="nav (baseUrl, currentPage, lastPage, sortBy, sortDir)" class="pagination is-small">
+    <!-- prev/next -->
+    <a class="pagination-previous" disabled th:if="${currentPage <= 1}">Previous</a>
+    <a class="pagination-previous" th:href="@{${baseUrl}(page=${currentPage - 1},sortBy=${sortBy},sortDir=${sortDir})}"
+       th:if="${currentPage > 1}">Previous</a>
+
+    <a class="pagination-next" disabled th:if="${currentPage >= lastPage}">Next</a>
+    <a class="pagination-next" th:href="@{${baseUrl}(page=${currentPage + 1},sortBy=${sortBy},sortDir=${sortDir})}"
+       th:if="${currentPage < lastPage}">Next</a>
+
+    <!-- pagination list -->
+    <ul class="pagination-list">
+        <th:block th:if="${currentPage > 4}">
+            <li><a class="n1 pagination-link"
+                   th:classappend="${currentPage == 1} ? is-current"
+                   th:href="@{${baseUrl}(page=1,sortBy=${sortBy},sortDir=${sortDir})}">1</a></li>
+
+            <li><span class="pagination-ellipsis">&hellip;</span></li>
+        </th:block>
+
+        <li class="nc-4 " th:if="${currentPage == lastPage}">
+            <a class="pagination-link"
+               th:href="@{${baseUrl}(page=${currentPage - 4},sortBy=${sortBy},sortDir=${sortDir})}"
+               th:text="${currentPage - 4}">curr-4</a>
+        </li>
+
+        <li class="nc-3" th:if="${currentPage == 4 || currentPage > lastPage - 2}">
+            <a class="pagination-link"
+               th:href="@{${baseUrl}(page=${currentPage - 3},sortBy=${sortBy},sortDir=${sortDir})}"
+               th:text="${currentPage - 3}">curr-3</a>
+        </li>
+
+        <li class="nc-2" th:if="${currentPage > 2 && currentPage != lastPage - 3}">
+            <a class="pagination-link"
+               th:href="@{${baseUrl}(page=${currentPage - 2},sortBy=${sortBy},sortDir=${sortDir})}"
+               th:text="${currentPage - 2}">curr-2</a>
+        </li>
+
+        <li class="nc-1" th:if="${currentPage > 1}">
+            <a class="pagination-link"
+               th:href="@{${baseUrl}(page=${currentPage - 1},sortBy=${sortBy},sortDir=${sortDir})}"
+               th:text="${currentPage - 1}">curr-1</a>
+        </li>
+
+        <li class="nc">
+            <a class="pagination-link is-current"
+               th:href="@{${baseUrl}(page=${currentPage},sortBy=${sortBy},sortDir=${sortDir})}"
+               th:text="${currentPage}">curr</a>
+        </li>
+
+        <li class="nc+1" th:if="${currentPage < lastPage}">
+            <a class="pagination-link"
+               th:href="@{${baseUrl}(page=${currentPage + 1},sortBy=${sortBy},sortDir=${sortDir})}"
+               th:text="${currentPage + 1}">curr+1</a>
+        </li>
+
+        <li class="nc+2" th:if="${currentPage <= lastPage - 2 && currentPage != 4}">
+            <a class="pagination-link"
+               th:href="@{${baseUrl}(page=${currentPage + 2},sortBy=${sortBy},sortDir=${sortDir})}"
+               th:text="${currentPage + 2}">curr+2</a>
+        </li>
+
+        <li class="nc+3" th:if="${currentPage == lastPage - 3 || currentPage <= 2}">
+            <a class="pagination-link"
+               th:href="@{${baseUrl}(page=${currentPage + 3},sortBy=${sortBy},sortDir=${sortDir})}"
+               th:text="${currentPage + 3}">curr+3</a>
+        </li>
+
+        <li class="nc+4" th:if="${currentPage == 1}">
+            <a class="pagination-link"
+               th:href="@{${baseUrl}(page=${currentPage + 4},sortBy=${sortBy},sortDir=${sortDir})}"
+               th:text="${currentPage + 4}">curr+4</a>
+        </li>
+
+        <th:block th:if="${currentPage <= lastPage - 4}">
+            <li><span class="pagination-ellipsis">&hellip;</span></li>
+
+            <li class="nlast">
+                <a class="pagination-link"
+                   th:classappend="${currentPage == lastPage} ? is-current"
+                   th:href="@{${baseUrl}(page=${lastPage},sortBy=${sortBy},sortDir=${sortDir})}"
+                   th:text="${lastPage}">last</a></li>
+        </th:block>
+
+    </ul>
+</nav>
+</body>
+</html>

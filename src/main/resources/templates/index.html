@@ -1,10 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>SO Q-Search</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 </head>
 <body>
-Test
+<section class="section">
+    <div class="container">
+        <h1 class="title">
+            SO Q-Search
+        </h1>
+        <p class="subtitle">
+            A personal archive manager for <strong>StackOverflow</strong>!
+        </p>
+
+        <nav class="level">
+            <div class="level-left">
+                <div class="level-item">
+                    <span>Sort by:</span>
+                    <span class="sort-by-item"><a th:classappend="${sortBy == 'Activity'} ? has-text-weight-semibold"
+                                                  th:href="@{/(sortBy=Activity)}">Activity</a></span>
+                    <span class="sort-by-item"><a th:classappend="${sortBy == 'Vote'} ? has-text-weight-semibold"
+                                                  th:href="@{/(sortBy=Vote)}">Vote</a></span>
+                    <span class="sort-by-item"><a th:classappend="${sortBy == 'Asked'} ? has-text-weight-semibold"
+                                                  th:href="@{/(sortBy=Asked)}">Asked</a></span>
+                    <span class="sort-by-item"><a th:classappend="${sortBy == 'Views'} ? has-text-weight-semibold"
+                                                  th:href="@{/(sortBy=Views)}">Views</a></span>
+                </div>
+            </div>
+
+            <div class="level-right">
+                <div class="level-item">
+                    <p class="subtitle is-5">
+                        <strong th:text="${totalItems}">123</strong> questions
+                    </p>
+                </div>
+            </div>
+        </nav>
+
+        <main class="columns">
+            <div class="column is-one-quarter">
+                <div class="field has-addons">
+                    <p class="control">
+                        <a class="button" th:href="@{/(sortDir=Desc)}"
+                           th:classappend="${sortDir == 'Desc'} ? 'is-info is-selected'">
+                            <span class="icon is-small"><i class="fas fa-angle-down"></i></span>
+                            <span>Desc</span>
+                        </a>
+                    </p>
+                    <p class="control">
+                        <a class="button" th:href="@{/(sortDir=Asc)}"
+                           th:classappend="${sortDir == 'Asc'} ? 'is-info is-selected'">
+                            <span class="icon is-small"><i class="fas fa-angle-up"></i></span>
+                            <span>Asc</span>
+                        </a>
+                    </p>
+                </div>
+
+                <div class="field has-addons">
+                    <p class="control">
+                        <input class="input" type="text" placeholder="Find a question">
+                    </p>
+                    <p class="control">
+                        <button class="button">
+                            Search
+                        </button>
+                    </p>
+                </div>
+            </div>
+
+            <div class="column">
+                <table class="table is-striped is-fullwidth is-hoverable q-list">
+                    <tr th:each="q : ${questions}">
+                        <td title="Votes" class="has-text-centered">
+                            <p><span class="icon is-small"><i class="fas fa-thumbs-up"></i></span></p>
+                            <p th:text="${q.scoreNice}" class="title is-6"></p>
+                        </td>
+                        <td title="Answers" class="has-text-centered">
+                            <p><span class="icon is-small"><i class="fas fa-comment"
+                                                              data-fa-transform="flip-h"></i></span></p>
+                            <p th:text="${q.answerCountNice}" class="title is-6"></p>
+                        </td>
+                        <td title="Views" class="has-text-centered">
+                            <p><span class="icon is-small"><i class="fas fa-eye"></i></span></p>
+                            <p th:text="${q.viewCountNice}" class="title is-6"></p>
+                        </td>
+                        <td>
+                            <a th:href="${q.link}" target="_blank">
+                                <span th:utext="${q.title}" class="has-text-weight-semibold"></span>
+                                <!--<span class="icon is-small"><i class="fas fa-external-link-alt"></i></span>-->
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+                <div>
+                    <div th:replace="templates/pagination.html :: nav ( '/', ${currentPage}, ${pages.last}, ${sortBy}, ${sortDir} )"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+</section>
 </body>
 </html>
