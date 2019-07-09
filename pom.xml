@@ -24,8 +24,6 @@
 
         <!-- test -->
         <junit.version>5.4.2</junit.version>
-<!--        <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>-->
-<!--        <maven-failsafe-plugin.version>2.22.0</maven-failsafe-plugin.version>-->
         <assertj.version>3.11.1</assertj.version>
         <mockk.version>1.9.3.kotlin12</mockk.version>
     </properties>
@@ -144,14 +142,6 @@
                     </execution>
                 </executions>
             </plugin>
-<!--            <plugin>-->
-<!--                <artifactId>maven-surefire-plugin</artifactId>-->
-<!--                <version>${maven-surefire-plugin.version}</version>-->
-<!--            </plugin>-->
-<!--            <plugin>-->
-<!--                <artifactId>maven-failsafe-plugin</artifactId>-->
-<!--                <version>${maven-failsafe-plugin.version}</version>-->
-<!--            </plugin>-->
         </plugins>
     </build>
 
