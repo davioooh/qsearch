@@ -2,8 +2,10 @@ package com.davioooh.qsearch
 
 import com.davioooh.qsearch.authentication.*
 import com.davioooh.qsearch.handlers.RootHandler
+import com.davioooh.qsearch.services.QuestionsService
 import com.davioooh.qsearch.stackexchange.api.ApiClientConfig
 import com.davioooh.qsearch.stackexchange.api.AuthApi
+import com.davioooh.qsearch.stackexchange.api.QuestionsApi
 import com.davioooh.qsearch.stackexchange.api.UsersApi
 import com.davioooh.qsearch.utils.AesEncryption
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -28,13 +30,15 @@ fun main(args: Array<String>) {
             AesEncryption(System.getProperty("encryptionKey").toByteArray())
         )
 
-    val usersApi = UsersApi(
-        ApiClientConfig(
-            "stackoverflow",
-            System.getProperty("key"),
-            "!9Z(-x-Ptf"
-        )
+    val apiConfig = ApiClientConfig(
+        "stackoverflow",
+        System.getProperty("key"),
+        "!9Z(-x-Ptf"
     )
+
+    val usersApi = UsersApi(apiConfig)
+
+    val questionsApi = QuestionsApi(apiConfig)
 
     val authApi = AuthApi(
         System.getProperty("clientId"),
@@ -48,6 +52,8 @@ fun main(args: Array<String>) {
         System.getProperty("redirectUri"),
         csrfPersistence
     )
+
+    val questionsService = QuestionsService(questionsApi)
 
     Javalin
         .create {
@@ -68,7 +74,7 @@ fun main(args: Array<String>) {
             get("/back", OAuthCallbackHandler(authApi, csrfPersistence, accessTokenPersistence))
 
             // >
-            get("/", RootHandler())
+            get("/", RootHandler(questionsService))
         }
 }
 
