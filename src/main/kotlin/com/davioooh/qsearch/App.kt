@@ -1,6 +1,7 @@
 package com.davioooh.qsearch
 
 import com.davioooh.qsearch.authentication.*
+import com.davioooh.qsearch.handlers.RootHandler
 import com.davioooh.qsearch.stackexchange.api.ApiClientConfig
 import com.davioooh.qsearch.stackexchange.api.AuthApi
 import com.davioooh.qsearch.stackexchange.api.UsersApi
@@ -67,9 +68,7 @@ fun main(args: Array<String>) {
             get("/back", OAuthCallbackHandler(authApi, csrfPersistence, accessTokenPersistence))
 
             // >
-            get("/") {
-                it.render("/templates/index.html")
-            }
+            get("/", RootHandler())
         }
 }
 
