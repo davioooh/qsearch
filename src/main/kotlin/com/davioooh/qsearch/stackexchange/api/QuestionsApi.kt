@@ -9,7 +9,7 @@ class QuestionsApi(conf: ApiClientConfig) {
 
     fun fetchUserFavoriteQuestions(
         accessToken: String, userId: Int? = null,
-        page: Int = 0, pageSize: Int = 100
+        page: Int = 1, pageSize: Int = 100
     ): ResultWrapper<Question> =
         httpClient.get(
             if (userId == null) "/me/favorites" else "/users/$userId/favorites", listOf(
