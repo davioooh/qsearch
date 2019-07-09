@@ -2,12 +2,10 @@ package com.davioooh.qsearch.services
 
 import com.davioooh.qsearch.services.SortingCriteria.*
 import com.davioooh.qsearch.services.SortingDirection.Desc
-import com.davioooh.qsearch.stackexchange.api.model.Question
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
-import java.time.ZoneOffset
 
 internal class QuestionsSortingTest {
     private val unsortedQuestions: Questions
@@ -120,26 +118,5 @@ internal class QuestionsSortingTest {
         }
 
     }
-
-    fun question(
-        questionId: Int,
-        title: String,
-        creationDate: LocalDateTime = LocalDateTime.now(),
-        lastActivityDate: LocalDateTime = LocalDateTime.now(),
-        vote: Int,
-        views: Int
-    ) = Question(
-        answerCount = 5,
-        creationDate = creationDate.atZone(ZoneOffset.UTC).toInstant().toEpochMilli(),
-        answered = false,
-        lastActivityDate = lastActivityDate.atZone(ZoneOffset.UTC).toInstant().toEpochMilli(),
-        lastEditDate = 0,
-        link = "/q-link/$questionId",
-        questionId = questionId,
-        score = vote,
-        tags = listOf(),//(1..tagNum).map { "tag-$it" }.toList(),
-        title = title,
-        viewCount = views
-    )
 
 }
