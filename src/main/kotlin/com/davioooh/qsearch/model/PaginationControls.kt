@@ -24,24 +24,34 @@ class PaginationBar(
                 else -> PaginationButton(btnUrlTemplate.format(currentPage + 1), "Next")
             }
 
-            val btnBarRange = when (lastPage) {
-                in 1..5 -> IntRange(1, lastPage)
-                else -> IntRange(
-                    if (currentPage - 2 >= 1) currentPage - 2 else 1,
-                    if (currentPage + 2 <= lastPage) currentPage + 2 else lastPage
-                )
-            }
+            val btnBarRange =
+                if (lastPage in 1..10) 1..lastPage
+                else when (currentPage) {
+                    in 1..4 -> 1..5
+                    in (lastPage - 3)..lastPage -> (lastPage - 4)..lastPage
+                    else -> IntRange(
+                        if (currentPage - 2 >= 1) currentPage - 2 else 1,
+                        if (currentPage + 2 <= lastPage) currentPage + 2 else lastPage
+                    )
+                }
 
             val firstButton =
-                if (lastPage > 5 && currentPage >= 5) PaginationButton(
-                    btnUrlTemplate.format(1),
-                    "1"
-                ) else null
+                when (lastPage) {
+                    in 1..10 -> null
+                    else -> when (currentPage) {
+                        in 1..4 -> null
+                        else -> PaginationButton(btnUrlTemplate.format(1), 1.toString())
+                    }
+                }
+
             val lastButton =
-                if (lastPage > 5 && currentPage <= lastPage - 4) PaginationButton(
-                    btnUrlTemplate.format(lastPage),
-                    lastPage.toString()
-                ) else null
+                when (lastPage) {
+                    in 1..10 -> null
+                    else -> when (currentPage) {
+                        in (lastPage - 3)..lastPage -> null
+                        else -> PaginationButton(btnUrlTemplate.format(lastPage), lastPage.toString())
+                    }
+                }
 
             return PaginationBar(
                 btnBarRange.map { PaginationButton(btnUrlTemplate.format(it), it.toString()) }.toTypedArray(),
