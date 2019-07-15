@@ -7,11 +7,6 @@ import org.junit.jupiter.params.provider.MethodSource
 
 internal class PaginationBarTest {
 
-    // TODO test next + previous buttons
-    // TODO refactor tests:
-    // - split by controls: first button, last button, buttons bar, etc.
-    // - code reuse...
-
     @Nested
     inner class WhenPagesAreLessThanOrEqualTo10 {
 
