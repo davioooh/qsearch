@@ -75,7 +75,7 @@ internal class PaginationTest {
     inner class CalculateLastPageFun {
         @Test
         fun `calculate last page correctly`() {
-            assertThat(calculateLastPage(itemsList, 3)).isEqualTo(3)
+            assertThat(calculateLastPage(itemsList.size, 3)).isEqualTo(3)
         }
     }
 }
