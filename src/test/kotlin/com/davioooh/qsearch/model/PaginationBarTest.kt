@@ -109,8 +109,8 @@ internal class PaginationBarTest {
         val lastPage: Int
     )
 
-    private fun paginationBtn(pageNum: Int, btnText: String = pageNum.toString()) =
-        PaginationButton("/?page=$pageNum", btnText)
+    private fun paginationBtn(pageNum: Int, btnText: String = pageNum.toString(), isCurrent: Boolean = false) =
+        PaginationButton("/?page=$pageNum", btnText, isCurrent = isCurrent)
 
     private fun prevBtn(currentPageNum: Int) = paginationBtn(currentPageNum - 1, "Prev")
     private fun nextBtn(currentPageNum: Int) = paginationBtn(currentPageNum + 1, "Next")
@@ -123,7 +123,7 @@ internal class PaginationBarTest {
         firstButtonVisible: Boolean = false,
         lastButtonVisible: Boolean = false
     ) = PaginationBar(
-        IntRange(btnBarStart, btnBarEnd).map { paginationBtn(it) }.toTypedArray(),
+        IntRange(btnBarStart, btnBarEnd).map { paginationBtn(it, isCurrent = currentPageNum == it) }.toTypedArray(),
         currentPageNum,
         firstButton = if (firstButtonVisible) paginationBtn(1) else null,
         lastButton = if (lastButtonVisible) paginationBtn(lastPageNum) else null,

@@ -54,7 +54,13 @@ data class PaginationBar(
                 }
 
             return PaginationBar(
-                btnBarRange.map { PaginationButton(btnUrlTemplate.format(it), it.toString()) }.toTypedArray(),
+                btnBarRange.map {
+                    PaginationButton(
+                        btnUrlTemplate.format(it),
+                        it.toString(),
+                        currentPage == it
+                    )
+                }.toTypedArray(),
                 currentPage,
                 firstButton = firstButton,
                 lastButton = lastButton,
@@ -94,6 +100,7 @@ data class PaginationBar(
 data class PaginationButton(
     val url: String,
     val text: String,
-    val enabled: Boolean = true
+    val isCurrent: Boolean = false,
+    val isEnabled: Boolean = true
     //, val visible: Boolean = true
 )
