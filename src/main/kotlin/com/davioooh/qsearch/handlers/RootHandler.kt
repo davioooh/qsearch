@@ -1,13 +1,14 @@
 package com.davioooh.qsearch.handlers
 
 import com.davioooh.qsearch.authentication.AuthenticationInfoHolder
+import com.davioooh.qsearch.model.PaginationBar
+import com.davioooh.qsearch.model.calculateLastPage
 import com.davioooh.qsearch.services.QuestionsService
 import com.davioooh.qsearch.services.SortingCriteria.Activity
 import com.davioooh.qsearch.services.SortingDirection.Desc
 import com.davioooh.qsearch.utils.enumValueOrDefault
 import io.javalin.http.Context
 import io.javalin.http.Handler
-import kotlin.math.ceil
 
 class RootHandler(
     private val questionsService: QuestionsService
@@ -21,21 +22,21 @@ class RootHandler(
         val favResult =
             questionsService.getUserFavorites(
                 AuthenticationInfoHolder.currentUser.userId,
-                page,
-                pageSize,
-                sortBy,
-                sortDir
+                page, pageSize,
+                sortBy, sortDir
             )
+
+        val paginationBar = PaginationBar.from(favResult.page, calculateLastPage(favResult.total, pageSize))
+
         ctx.render(
             "/templates/index.html",
             mapOf(
                 "questions" to favResult.items,
-                "currentPage" to favResult.page,
-                "pages" to 1..ceil(favResult.total / pageSize.toFloat()).toInt(),
                 "pageSize" to pageSize,
                 "totalItems" to favResult.total,
                 "sortBy" to sortBy.toString(),
-                "sortDir" to sortDir.toString()
+                "sortDir" to sortDir.toString(),
+                "paginationBar" to paginationBar
             )
         )
     }

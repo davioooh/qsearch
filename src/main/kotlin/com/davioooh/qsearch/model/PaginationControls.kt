@@ -15,6 +15,8 @@ data class PaginationBar(
 
             val btnUrlTemplate = "$baseUrl?page=%s"
 
+            // FIXME gestire url bottoni per criteri paginazione + ordinamento
+
             val prevButton = when (currentPage) {
                 1 -> null
                 else -> PaginationButton(btnUrlTemplate.format(currentPage - 1), "Prev")

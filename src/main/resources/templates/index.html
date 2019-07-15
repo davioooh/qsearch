@@ -98,7 +98,7 @@
                     </tr>
                 </table>
                 <div>
-                    <div th:replace="templates/pagination.html :: nav ( '/', ${currentPage}, ${pages.last}, ${sortBy}, ${sortDir} )"></div>
+                    <div th:replace="templates/pagination.html :: nav ( ${paginationBar} )"></div>
                 </div>
             </div>
         </main>
