@@ -1,6 +1,6 @@
 package com.davioooh.qsearch.model
 
-class PaginationBar(
+data class PaginationBar(
     val buttonsBar: Array<PaginationButton>,
     val currentPage: Int,
     val firstButton: PaginationButton? = null,
@@ -16,11 +16,11 @@ class PaginationBar(
             val btnUrlTemplate = "$baseUrl?page=%s"
 
             val prevButton = when (currentPage) {
-                1 -> PaginationButton("#", "Prev", false)
+                1 -> null
                 else -> PaginationButton(btnUrlTemplate.format(currentPage - 1), "Prev")
             }
             val nextButton = when (currentPage) {
-                lastPage -> PaginationButton("#", "Next", false)
+                lastPage -> null
                 else -> PaginationButton(btnUrlTemplate.format(currentPage + 1), "Next")
             }
 
@@ -62,6 +62,32 @@ class PaginationBar(
                 nextButton = nextButton
             )
         }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as PaginationBar
+
+        if (!buttonsBar.contentEquals(other.buttonsBar)) return false
+        if (currentPage != other.currentPage) return false
+        if (firstButton != other.firstButton) return false
+        if (lastButton != other.lastButton) return false
+        if (previousButton != other.previousButton) return false
+        if (nextButton != other.nextButton) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = buttonsBar.contentHashCode()
+        result = 31 * result + currentPage
+        result = 31 * result + (firstButton?.hashCode() ?: 0)
+        result = 31 * result + (lastButton?.hashCode() ?: 0)
+        result = 31 * result + (previousButton?.hashCode() ?: 0)
+        result = 31 * result + (nextButton?.hashCode() ?: 0)
+        return result
     }
 }
 
