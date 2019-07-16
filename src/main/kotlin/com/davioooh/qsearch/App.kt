@@ -56,17 +56,19 @@ fun main(args: Array<String>) {
     val questionsService = QuestionsService(questionsApi)
 
     Javalin
-        .create {
+        .create { config ->
             JavalinJackson.configure(objMapper)
 
-            it.accessManager(
-                OAuthAccessManager(
-                    accessTokenPersistence,
-                    usersApi,
-                    oAuthRedirectHandler,
-                    excludedPaths = listOf("/back")
+            config
+                .addStaticFiles("/public")
+                .accessManager(
+                    OAuthAccessManager(
+                        accessTokenPersistence,
+                        usersApi,
+                        oAuthRedirectHandler,
+                        excludedPaths = listOf("/back")
+                    )
                 )
-            )
         }
         .start()
         .routes {
