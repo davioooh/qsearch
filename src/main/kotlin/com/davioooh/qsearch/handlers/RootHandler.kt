@@ -26,7 +26,16 @@ class RootHandler(
                 sortBy, sortDir
             )
 
-        val paginationBar = PaginationBar.from(favResult.page, calculateLastPage(favResult.total, pageSize))
+        val paginationBar =
+            PaginationBar.from(
+                favResult.page, calculateLastPage(favResult.total, pageSize),
+                baseUrl = PaginationBar.buildUrl(
+                    "/", listOf(
+                        "sortBy" to sortBy.toString(),
+                        "sortDir" to sortDir.toString()
+                    )
+                )
+            )
 
         ctx.render(
             "/templates/index.html",

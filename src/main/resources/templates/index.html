@@ -46,14 +46,14 @@
             <div class="column is-one-quarter">
                 <div class="field has-addons">
                     <p class="control">
-                        <a class="button" th:href="@{/(sortDir=Desc)}"
+                        <a class="button" th:href="@{/(sortBy=${sortBy},sortDir=Desc)}"
                            th:classappend="${sortDir == 'Desc'} ? 'is-info is-selected'">
                             <span class="icon is-small"><i class="fas fa-angle-down"></i></span>
                             <span>Desc</span>
                         </a>
                     </p>
                     <p class="control">
-                        <a class="button" th:href="@{/(sortDir=Asc)}"
+                        <a class="button" th:href="@{/(sortBy=${sortBy},sortDir=Asc)}"
                            th:classappend="${sortDir == 'Asc'} ? 'is-info is-selected'">
                             <span class="icon is-small"><i class="fas fa-angle-up"></i></span>
                             <span>Asc</span>
@@ -61,16 +61,16 @@
                     </p>
                 </div>
 
-                <div class="field has-addons">
-                    <p class="control">
-                        <input class="input" type="text" placeholder="Find a question">
-                    </p>
-                    <p class="control">
-                        <button class="button">
-                            Search
-                        </button>
-                    </p>
-                </div>
+                <!--                <div class="field has-addons">-->
+                <!--                    <p class="control">-->
+                <!--                        <input class="input" type="text" placeholder="Find a question">-->
+                <!--                    </p>-->
+                <!--                    <p class="control">-->
+                <!--                        <button class="button">-->
+                <!--                            Search-->
+                <!--                        </button>-->
+                <!--                    </p>-->
+                <!--                </div>-->
             </div>
 
             <div class="column">
