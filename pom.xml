@@ -21,6 +21,7 @@
         <slf4j-simple.version>1.7.26</slf4j-simple.version>
         <jackson.version>2.9.8</jackson.version>
         <fuel.version>2.1.0</fuel.version>
+        <ehcache.version>3.7.0</ehcache.version>
 
         <!-- test -->
         <junit.version>5.4.2</junit.version>
@@ -81,6 +82,11 @@
             <groupId>com.github.kittinunf.fuel</groupId>
             <artifactId>fuel-jackson</artifactId>
             <version>${fuel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>${ehcache.version}</version>
         </dependency>
 
         <!-- test -->
