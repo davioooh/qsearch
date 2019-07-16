@@ -1,5 +1,9 @@
 package com.davioooh.qsearch.model
 
+import com.davioooh.qsearch.utils.Parameters
+import com.davioooh.qsearch.utils.toParameters
+import com.davioooh.qsearch.utils.toUrl
+
 data class PaginationBar(
     val buttonsBar: Array<PaginationButton>,
     val currentPage: Int,
@@ -13,9 +17,7 @@ data class PaginationBar(
             require(currentPage >= 1) { "currentPage can't be lower than 1" }
             require(currentPage <= lastPage) { "currentPage ($currentPage) can't be greater than lastPage ($lastPage)" }
 
-            val btnUrlTemplate = "$baseUrl?page=%s"
-
-            // FIXME gestire url bottoni per criteri paginazione + ordinamento
+            val btnUrlTemplate = buildUrl(baseUrl, listOf("page" to "%s"))
 
             val prevButton = when (currentPage) {
                 1 -> null
@@ -69,6 +71,16 @@ data class PaginationBar(
                 previousButton = prevButton,
                 nextButton = nextButton
             )
+        }
+
+        fun buildUrl(baseUrl: String, queryParams: Parameters): String {
+            val urlPieces = baseUrl.split("?")
+
+            return when (urlPieces.size) {
+                1 -> if (queryParams.isNotEmpty()) "$baseUrl?" + queryParams.toUrl() else baseUrl
+                2 -> "${urlPieces[0]}?" + (urlPieces[1].toParameters() + queryParams).toUrl()
+                else -> throw IllegalArgumentException("Invalid base url")
+            }
         }
     }
 

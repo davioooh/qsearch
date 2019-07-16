@@ -1,11 +1,29 @@
 package com.davioooh.qsearch.model
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 internal class PaginationBarTest {
+
+    @Test
+    fun `builds url correctly`() {
+        assertThat(PaginationBar.buildUrl("/", listOf())).isEqualTo("/")
+        assertThat(PaginationBar.buildUrl("/", listOf("page" to "10"))).isEqualTo("/?page=10")
+        assertThat(PaginationBar.buildUrl("/base?", listOf("arg" to "x"))).isEqualTo("/base?arg=x")
+        assertThat(
+            PaginationBar.buildUrl(
+                "/baseUrl?aaa=12",
+                listOf("page" to "10")
+            )
+        ).isEqualTo("/baseUrl?aaa=12&page=10")
+        assertThatExceptionOfType(IllegalArgumentException::class.java)
+            .isThrownBy { PaginationBar.buildUrl("/baseUrl?aaa?ee", listOf("page" to "10")) }
+            .withMessage("Invalid base url")
+    }
 
     @Nested
     inner class WhenPagesAreLessThanOrEqualTo10 {
