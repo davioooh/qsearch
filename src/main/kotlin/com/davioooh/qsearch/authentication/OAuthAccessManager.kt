@@ -1,6 +1,6 @@
 package com.davioooh.qsearch.authentication
 
-import com.davioooh.qsearch.stackexchange.api.UsersApi
+import com.davioooh.qsearch.services.UsersService
 import io.javalin.core.security.AccessManager
 import io.javalin.core.security.Role
 import io.javalin.http.Context
@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory
 
 class OAuthAccessManager(
     private val accessTokenPersistence: AccessTokenPersistence,
-    private val usersApi: UsersApi,
+    private val usersService: UsersService,
     private val redirectHandler: OAuthRedirectHandler,
     private val excludedPaths: List<String> = listOf()
 ) : AccessManager {
@@ -34,8 +34,7 @@ class OAuthAccessManager(
             }
             else -> {
                 // TODO cache user fetching call
-                usersApi.fetchUserProfile(tokenDetails.token).let {
-                    val user = it.items.firstOrNull() ?: throw Exception("Cannot fetch user data")
+                usersService.getMe(tokenDetails.token)?.let { user ->
                     AuthenticationInfoHolder.setCurrentUser(
                         AuthenticatedUser(
                             user.userId,
@@ -45,15 +44,12 @@ class OAuthAccessManager(
                     )
 
                     logger.debug("User ${user.displayName}(${user.userId}) retrieved correctly")
-                }
+
+                } ?: throw Exception("Cannot fetch user data")
 
                 handler.handle(ctx)
             }
         }
-    }
-
-    private fun getUserProfile() {
-        TODO()
     }
 
 }

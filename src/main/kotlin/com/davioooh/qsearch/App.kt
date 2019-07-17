@@ -3,6 +3,7 @@ package com.davioooh.qsearch
 import com.davioooh.qsearch.authentication.*
 import com.davioooh.qsearch.handlers.RootHandler
 import com.davioooh.qsearch.services.QuestionsService
+import com.davioooh.qsearch.services.UsersService
 import com.davioooh.qsearch.stackexchange.api.ApiClientConfig
 import com.davioooh.qsearch.stackexchange.api.AuthApi
 import com.davioooh.qsearch.stackexchange.api.QuestionsApi
@@ -37,9 +38,7 @@ fun main(args: Array<String>) {
     )
 
     val usersApi = UsersApi(apiConfig)
-
     val questionsApi = QuestionsApi(apiConfig)
-
     val authApi = AuthApi(
         System.getProperty("clientId"),
         System.getProperty("clientSecret"),
@@ -53,6 +52,7 @@ fun main(args: Array<String>) {
         csrfPersistence
     )
 
+    val usersService = UsersService(usersApi)
     val questionsService = QuestionsService(questionsApi)
 
     Javalin
@@ -64,7 +64,7 @@ fun main(args: Array<String>) {
                 .accessManager(
                     OAuthAccessManager(
                         accessTokenPersistence,
-                        usersApi,
+                        usersService,
                         oAuthRedirectHandler,
                         excludedPaths = listOf("/back")
                     )

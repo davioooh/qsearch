@@ -1,7 +1,6 @@
 package com.davioooh.qsearch.authentication
 
-import com.davioooh.qsearch.stackexchange.api.UsersApi
-import com.davioooh.qsearch.stackexchange.api.model.ResultWrapper
+import com.davioooh.qsearch.services.UsersService
 import io.javalin.http.Context
 import io.javalin.http.Handler
 import io.mockk.*
@@ -15,12 +14,12 @@ internal class OAuthAccessManagerTest {
     private val ctx = mockk<Context>(relaxed = true)
     private val reqHandler = mockk<Handler>(relaxed = true)
     private val accessTokenPersistence = mockk<AccessTokenPersistence>(relaxed = true)
-    private val soUsersApi = mockk<UsersApi>(relaxed = true)
+    private val usersService = mockk<UsersService>(relaxed = true)
     private val oAuthRedirectHandler = mockk<OAuthRedirectHandler>(relaxed = true)
     private val oAuthAccessManager =
         OAuthAccessManager(
             accessTokenPersistence,
-            soUsersApi,
+            usersService,
             oAuthRedirectHandler,
             excludedPaths = listOf("/excluded")
         )
@@ -60,19 +59,14 @@ internal class OAuthAccessManagerTest {
 
         every { accessTokenPersistence.retrieve(ctx) } returns validAccessTokenDetails
 
-        every { soUsersApi.fetchUserProfile(validAccessTokenDetails.token) } returns ResultWrapper(
-            items = listOf(soUser()),
-            hasMore = false,
-            quotaMax = 0,
-            quotaRemaining = 0
-        )
+        every { usersService.getMe(validAccessTokenDetails.token) } returns soUser()
 
         mockkObject(AuthenticationInfoHolder)
         every { AuthenticationInfoHolder.setCurrentUser(any()) } answers { nothing }
 
         oAuthAccessManager.manage(reqHandler, ctx, mutableSetOf())
 
-        verify { soUsersApi.fetchUserProfile(validAccessTokenDetails.token) }
+        verify { usersService.getMe(validAccessTokenDetails.token) }
         verify {
             AuthenticationInfoHolder.setCurrentUser(authenticatedUser())
         }
