@@ -1,5 +1,7 @@
 package com.davioooh.qsearch.services
 
+import com.davioooh.qsearch.caching.QuestionsCache
+import com.davioooh.qsearch.caching.QuestionsWrapper
 import com.davioooh.qsearch.model.PageableResult
 import com.davioooh.qsearch.model.PaginationCriteria
 import com.davioooh.qsearch.model.paginate
@@ -17,6 +19,27 @@ class QuestionsService(
         accessToken: String,
         paginationCriteria: PaginationCriteria
     ): PageableResult<Question> {
+        var questions = QuestionsCache.get(accessToken)?.questions ?: listOf()
+        if (questions.isEmpty()) {
+            questions = fetchQuestionsFromApi(userId, accessToken)
+                .also { if (it.isNotEmpty()) QuestionsCache.put(accessToken, QuestionsWrapper(it)) }
+        } else {
+            logger.debug("Favorite questions for user ($userId) found in QuestionsCache")
+        }
+
+        val sQuestions = questions.sortBy(
+            paginationCriteria.sortingCriteria,
+            paginationCriteria.sortingDirection
+        )
+
+        return paginate(
+            sQuestions,
+            paginationCriteria.page,
+            paginationCriteria.pageSize
+        )
+    }
+
+    private fun fetchQuestionsFromApi(userId: Int, accessToken: String): Questions {
         val questions = mutableListOf<Question>()
         var i = 1
         do {
@@ -31,18 +54,6 @@ class QuestionsService(
             logger.debug("Request $i")
             i++
         } while (questions.size < res.total ?: 0)
-
-        val sQuestions = questions.sortBy(
-            paginationCriteria.sortingCriteria,
-            paginationCriteria.sortingDirection
-        )
-
-        logger.debug("Sort by ${paginationCriteria.sortingCriteria} (${paginationCriteria.sortingDirection})")
-
-        return paginate(
-            sQuestions,
-            paginationCriteria.page,
-            paginationCriteria.pageSize
-        )
+        return questions
     }
 }
