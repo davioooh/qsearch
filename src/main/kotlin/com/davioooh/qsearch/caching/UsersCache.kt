@@ -8,9 +8,11 @@ import org.ehcache.config.builders.CacheManagerBuilder
 import org.ehcache.config.builders.ResourcePoolsBuilder
 
 object UsersCache : CacheFacade<User> {
+    private const val CACHE_NAME = "usersCache"
+
     private val cacheManager: CacheManager = CacheManagerBuilder.newCacheManagerBuilder()
         .withCache(
-            "usersCache",
+            CACHE_NAME,
             CacheConfigurationBuilder.newCacheConfigurationBuilder(
                 String::class.java, User::class.java,
                 ResourcePoolsBuilder.heap(100)
@@ -19,7 +21,7 @@ object UsersCache : CacheFacade<User> {
         .build(true)
 
     private val cache: Cache<String, User>
-        get() = cacheManager.getCache("usersCache", String::class.java, User::class.java)
+        get() = cacheManager.getCache(CACHE_NAME, String::class.java, User::class.java)
 
     override fun put(key: String, value: User): User = cache.put(key, value).let { return value }
 
