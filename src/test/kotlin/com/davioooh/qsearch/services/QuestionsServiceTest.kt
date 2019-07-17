@@ -3,6 +3,7 @@ package com.davioooh.qsearch.services
 import com.davioooh.qsearch.authentication.AuthenticationInfoHolder
 import com.davioooh.qsearch.authentication.authenticatedUser
 import com.davioooh.qsearch.model.PageableResult
+import com.davioooh.qsearch.model.PaginationCriteria
 import com.davioooh.qsearch.stackexchange.api.QuestionsApi
 import com.davioooh.qsearch.stackexchange.api.model.ResultWrapper
 import io.mockk.clearAllMocks
@@ -76,7 +77,11 @@ internal class QuestionsServiceTest {
             )
         } returns resultWrapper(questions)
 
-        val result = userFavoritesService.getUserFavorites(authenticatedUser.userId, page, pageSize)
+        val result = userFavoritesService.getUserFavorites(
+            authenticatedUser.userId,
+            authenticatedUser.accessToken,
+            PaginationCriteria(page, pageSize)
+        )
 
         assertThat(result).isEqualTo(expectedResult)
     }

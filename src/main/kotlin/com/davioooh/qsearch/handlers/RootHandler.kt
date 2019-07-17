@@ -2,6 +2,7 @@ package com.davioooh.qsearch.handlers
 
 import com.davioooh.qsearch.authentication.AuthenticationInfoHolder
 import com.davioooh.qsearch.model.PaginationBar
+import com.davioooh.qsearch.model.PaginationCriteria
 import com.davioooh.qsearch.model.calculateLastPage
 import com.davioooh.qsearch.services.QuestionsService
 import com.davioooh.qsearch.services.SortingCriteria.Activity
@@ -22,8 +23,8 @@ class RootHandler(
         val favResult =
             questionsService.getUserFavorites(
                 AuthenticationInfoHolder.currentUser.userId,
-                page, pageSize,
-                sortBy, sortDir
+                AuthenticationInfoHolder.currentUser.accessToken,
+                PaginationCriteria(page, pageSize, sortBy, sortDir)
             )
 
         val paginationBar =

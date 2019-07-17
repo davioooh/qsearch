@@ -1,10 +1,8 @@
 package com.davioooh.qsearch.services
 
-import com.davioooh.qsearch.authentication.AuthenticationInfoHolder
 import com.davioooh.qsearch.model.PageableResult
+import com.davioooh.qsearch.model.PaginationCriteria
 import com.davioooh.qsearch.model.paginate
-import com.davioooh.qsearch.services.SortingCriteria.Activity
-import com.davioooh.qsearch.services.SortingDirection.Asc
 import com.davioooh.qsearch.stackexchange.api.QuestionsApi
 import com.davioooh.qsearch.stackexchange.api.model.Question
 import org.slf4j.LoggerFactory
@@ -16,17 +14,15 @@ class QuestionsService(
 
     fun getUserFavorites(
         userId: Int,
-        page: Int,
-        pageSize: Int,
-        sortingCriteria: SortingCriteria = Activity,
-        sortingDirection: SortingDirection = Asc
+        accessToken: String,
+        paginationCriteria: PaginationCriteria
     ): PageableResult<Question> {
         val questions = mutableListOf<Question>()
         var i = 1
         do {
             val res =
                 questionsApi.fetchUserFavoriteQuestions(
-                    accessToken = AuthenticationInfoHolder.currentUser.accessToken,
+                    accessToken = accessToken,
                     userId = userId,
                     page = i,
                     pageSize = 100
@@ -36,10 +32,17 @@ class QuestionsService(
             i++
         } while (questions.size < res.total ?: 0)
 
-        val sQuestions = questions.sortBy(sortingCriteria, sortingDirection)
+        val sQuestions = questions.sortBy(
+            paginationCriteria.sortingCriteria,
+            paginationCriteria.sortingDirection
+        )
 
-        logger.debug("Sort by $sortingCriteria ($sortingDirection)")
+        logger.debug("Sort by ${paginationCriteria.sortingCriteria} (${paginationCriteria.sortingDirection})")
 
-        return paginate(sQuestions, page, pageSize)
+        return paginate(
+            sQuestions,
+            paginationCriteria.page,
+            paginationCriteria.pageSize
+        )
     }
 }

@@ -1,13 +1,21 @@
 package com.davioooh.qsearch.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.davioooh.qsearch.services.SortingCriteria
+import com.davioooh.qsearch.services.SortingDirection
 import kotlin.math.ceil
 
+data class PaginationCriteria(
+    val page: Int,
+    val pageSize: Int,
+    val sortingCriteria: SortingCriteria = SortingCriteria.Activity,
+    val sortingDirection: SortingDirection = SortingDirection.Asc
+)
+
 data class PageableResult<T>(
-    @JsonProperty("items") val items: List<T>,
-    @JsonProperty("page") val page: Int,
-    @JsonProperty("page_size") val pageSize: Int,
-    @JsonProperty("total") val total: Int
+    val items: List<T>,
+    val page: Int,
+    val pageSize: Int,
+    val total: Int
 )
 
 fun <T> paginate(items: List<T>, page: Int, pageSize: Int): PageableResult<T> {
