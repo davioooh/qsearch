@@ -33,7 +33,6 @@ class OAuthAccessManager(
                 redirectHandler.handle(ctx)
             }
             else -> {
-                // TODO cache user fetching call
                 usersService.getMe(tokenDetails.token)?.let { user ->
                     AuthenticationInfoHolder.setCurrentUser(
                         AuthenticatedUser(
@@ -42,9 +41,6 @@ class OAuthAccessManager(
                             tokenDetails.token
                         )
                     )
-
-                    logger.debug("User ${user.displayName}(${user.userId}) retrieved correctly")
-
                 } ?: throw Exception("Cannot fetch user data")
 
                 handler.handle(ctx)
