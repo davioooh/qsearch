@@ -10,7 +10,7 @@ import kotlin.reflect.KClass
 
 abstract class AbstractCacheFacadeImpl<T : Any>(private val valueClass: KClass<T>) :
     CacheFacade<T> {
-    private val cacheName = UUID.randomUUID().toString()
+    private val cacheName = "${UUID.randomUUID()}-${valueClass.simpleName}-cache"
 
     private val cacheManager: CacheManager = CacheManagerBuilder.newCacheManagerBuilder()
         .withCache(
