@@ -22,6 +22,7 @@
         <jackson.version>2.9.8</jackson.version>
         <fuel.version>2.1.0</fuel.version>
         <ehcache.version>3.7.0</ehcache.version>
+        <lucene.version>8.1.1</lucene.version>
 
         <!-- test -->
         <junit.version>5.4.2</junit.version>
@@ -87,6 +88,16 @@
             <groupId>org.ehcache</groupId>
             <artifactId>ehcache</artifactId>
             <version>${ehcache.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-queryparser</artifactId>
+            <version>${lucene.version}</version>
         </dependency>
 
         <!-- test -->
