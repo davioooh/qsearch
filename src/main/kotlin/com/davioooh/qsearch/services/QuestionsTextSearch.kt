@@ -12,6 +12,10 @@ import org.apache.lucene.queryparser.classic.MultiFieldQueryParser
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.store.ByteBuffersDirectory
 
+class QuestionItem(val id: Int, val title: String, val body: String)
+
+fun Questions.toQuestionItemArray() = this.map { QuestionItem(it.questionId, it.title, it.body ?: "") }.toTypedArray()
+
 object QuestionsSearchIndex {
     private val analyzer = StandardAnalyzer()
     private val index = ByteBuffersDirectory()
@@ -21,9 +25,9 @@ object QuestionsSearchIndex {
             .use { writer ->
                 qi.forEach {
                     val document = Document()
-                    document.add(StringField("id", it.first.toString(), Field.Store.YES))
-                    document.add(TextField("title", it.second, Field.Store.NO))
-                    document.add(TextField("body", it.third, Field.Store.NO))
+                    document.add(StringField("id", it.id.toString(), Field.Store.YES))
+                    document.add(TextField("title", it.title, Field.Store.NO))
+                    document.add(TextField("body", it.body, Field.Store.NO))
                     writer.addDocument(document)
                 }
             }
@@ -42,13 +46,4 @@ object QuestionsSearchIndex {
         }
         return docs.map { it.get("id").toInt() }
     }
-}
-
-typealias QuestionItem = Triple<Int, String, String>
-
-data class SearchCriteria(val key: String) {
-
-    val isClear
-        get() = false
-
 }

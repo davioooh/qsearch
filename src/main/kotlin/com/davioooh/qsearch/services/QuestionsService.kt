@@ -28,11 +28,7 @@ class QuestionsService(
             paginationCriteria.sortingDirection
         )
 
-        return paginate(
-            sQuestions,
-            paginationCriteria.page,
-            paginationCriteria.pageSize
-        )
+        return paginate(sQuestions, paginationCriteria.page, paginationCriteria.pageSize)
     }
 
     private fun fetchAllFavorites(accessToken: String, userId: Int): Questions {
@@ -41,7 +37,7 @@ class QuestionsService(
             questions = fetchFavoritesFromApi(userId, accessToken)
                 .also { if (it.isNotEmpty()) QuestionsCache.put(accessToken, QuestionsWrapper(it)) }
                 .also { q ->
-                    q.map { QuestionItem(it.questionId, it.title, it.body ?: "") }.toTypedArray()
+                    q.toQuestionItemArray()
                         .let { QuestionsSearchIndex.addToIndex(*it) }
                     logger.debug("Favorite questions for user ($userId) indexed for search")
                 }
@@ -69,11 +65,9 @@ class QuestionsService(
         return questions
     }
 
-    /**
-     * Returns ids of questions matching criteria
-     */
     private fun filterQuestionsByCriteria(questions: Questions, searchCriteria: SearchCriteria): Questions {
         val qids = QuestionsSearchIndex.search(searchCriteria.key)
         return questions.filter { qids.contains(it.questionId) }
+        // TODO add other search criteria
     }
 }
