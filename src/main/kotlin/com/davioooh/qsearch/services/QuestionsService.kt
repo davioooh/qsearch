@@ -2,9 +2,6 @@ package com.davioooh.qsearch.services
 
 import com.davioooh.qsearch.caching.QuestionsCache
 import com.davioooh.qsearch.caching.QuestionsWrapper
-import com.davioooh.qsearch.model.PageableResult
-import com.davioooh.qsearch.model.PaginationCriteria
-import com.davioooh.qsearch.model.paginate
 import com.davioooh.qsearch.stackexchange.api.QuestionsApi
 import com.davioooh.qsearch.stackexchange.api.model.Question
 import org.slf4j.LoggerFactory

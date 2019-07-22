@@ -2,8 +2,6 @@ package com.davioooh.qsearch.services
 
 import com.davioooh.qsearch.authentication.AuthenticationInfoHolder
 import com.davioooh.qsearch.authentication.authenticatedUser
-import com.davioooh.qsearch.model.PageableResult
-import com.davioooh.qsearch.model.PaginationCriteria
 import com.davioooh.qsearch.stackexchange.api.QuestionsApi
 import com.davioooh.qsearch.stackexchange.api.model.ResultWrapper
 import io.mockk.clearAllMocks

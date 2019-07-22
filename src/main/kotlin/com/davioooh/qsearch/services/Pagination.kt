@@ -1,7 +1,5 @@
-package com.davioooh.qsearch.model
+package com.davioooh.qsearch.services
 
-import com.davioooh.qsearch.services.SortingCriteria
-import com.davioooh.qsearch.services.SortingDirection
 import kotlin.math.ceil
 
 data class PaginationCriteria(

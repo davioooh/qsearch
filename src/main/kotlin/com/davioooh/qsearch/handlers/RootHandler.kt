@@ -2,11 +2,11 @@ package com.davioooh.qsearch.handlers
 
 import com.davioooh.qsearch.authentication.AuthenticationInfoHolder
 import com.davioooh.qsearch.model.PaginationBar
-import com.davioooh.qsearch.model.PaginationCriteria
-import com.davioooh.qsearch.model.calculateLastPage
+import com.davioooh.qsearch.services.PaginationCriteria
 import com.davioooh.qsearch.services.QuestionsService
 import com.davioooh.qsearch.services.SortingCriteria.Activity
 import com.davioooh.qsearch.services.SortingDirection.Desc
+import com.davioooh.qsearch.services.calculateLastPage
 import com.davioooh.qsearch.utils.enumValueOrDefault
 import io.javalin.http.Context
 import io.javalin.http.Handler
