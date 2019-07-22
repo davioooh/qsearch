@@ -2,6 +2,7 @@ package com.davioooh.qsearch.services
 
 import com.davioooh.qsearch.authentication.AuthenticationInfoHolder
 import com.davioooh.qsearch.authentication.authenticatedUser
+import com.davioooh.qsearch.caching.QuestionsCache
 import com.davioooh.qsearch.stackexchange.api.QuestionsApi
 import com.davioooh.qsearch.stackexchange.api.model.ResultWrapper
 import io.mockk.clearAllMocks
@@ -15,7 +16,7 @@ import org.junit.jupiter.api.Test
 internal class QuestionsServiceTest {
 
     private val questionsApi = mockk<QuestionsApi>(relaxed = true)
-    private val userFavoritesService = QuestionsService(questionsApi)
+    private val userFavoritesService = QuestionsService(questionsApi, QuestionsCache)
 
     private val questions = listOf(
         question(1, "Q1"),

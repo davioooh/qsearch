@@ -1,13 +1,14 @@
 package com.davioooh.qsearch.services
 
-import com.davioooh.qsearch.caching.QuestionsCache
+import com.davioooh.qsearch.caching.CacheFacade
 import com.davioooh.qsearch.caching.QuestionsWrapper
 import com.davioooh.qsearch.stackexchange.api.QuestionsApi
 import com.davioooh.qsearch.stackexchange.api.model.Question
 import org.slf4j.LoggerFactory
 
 class QuestionsService(
-    private val questionsApi: QuestionsApi
+    private val questionsApi: QuestionsApi,
+    private val cache: CacheFacade<QuestionsWrapper>
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -32,10 +33,10 @@ class QuestionsService(
     }
 
     private fun fetchAllFavorites(accessToken: String, userId: Int): Questions {
-        var questions = QuestionsCache.get(accessToken)?.questions ?: listOf()
+        var questions = cache.get(accessToken)?.questions ?: listOf()
         if (questions.isEmpty()) {
             questions = fetchFavoritesFromApi(userId, accessToken)
-                .also { if (it.isNotEmpty()) QuestionsCache.put(accessToken, QuestionsWrapper(it)) }
+                .also { if (it.isNotEmpty()) cache.put(accessToken, QuestionsWrapper(it)) }
                 .also { q ->
                     q.toQuestionItemArray()
                         .let { QuestionsSearchIndex.addToIndex(*it) }

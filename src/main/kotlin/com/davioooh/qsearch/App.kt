@@ -1,6 +1,8 @@
 package com.davioooh.qsearch
 
 import com.davioooh.qsearch.authentication.*
+import com.davioooh.qsearch.caching.QuestionsCache
+import com.davioooh.qsearch.caching.UsersCache
 import com.davioooh.qsearch.handlers.RootHandler
 import com.davioooh.qsearch.services.QuestionsService
 import com.davioooh.qsearch.services.UsersService
@@ -52,8 +54,8 @@ fun main(args: Array<String>) {
         csrfPersistence
     )
 
-    val usersService = UsersService(usersApi)
-    val questionsService = QuestionsService(questionsApi)
+    val usersService = UsersService(usersApi, UsersCache)
+    val questionsService = QuestionsService(questionsApi, QuestionsCache)
 
     Javalin
         .create { config ->
