@@ -4,6 +4,7 @@ import com.davioooh.qsearch.authentication.*
 import com.davioooh.qsearch.caching.QuestionsCache
 import com.davioooh.qsearch.caching.UsersCache
 import com.davioooh.qsearch.handlers.RootHandler
+import com.davioooh.qsearch.services.QuestionsSearchIndex
 import com.davioooh.qsearch.services.QuestionsService
 import com.davioooh.qsearch.services.UsersService
 import com.davioooh.qsearch.stackexchange.api.ApiClientConfig
@@ -55,7 +56,7 @@ fun main(args: Array<String>) {
     )
 
     val usersService = UsersService(usersApi, UsersCache)
-    val questionsService = QuestionsService(questionsApi, QuestionsCache)
+    val questionsService = QuestionsService(questionsApi, QuestionsCache, QuestionsSearchIndex)
 
     Javalin
         .create { config ->

@@ -16,11 +16,16 @@ class QuestionItem(val id: Int, val title: String, val body: String)
 
 fun Questions.toQuestionItemArray() = this.map { QuestionItem(it.questionId, it.title, it.body ?: "") }.toTypedArray()
 
-object QuestionsSearchIndex {
+interface FullTextSearchIndex<in IN, out OUT> {
+    fun addToIndex(vararg item: IN)
+    fun search(searchKey: String): List<OUT>
+}
+
+object QuestionsSearchIndex : FullTextSearchIndex<QuestionItem, Int> {
     private val analyzer = StandardAnalyzer()
     private val index = ByteBuffersDirectory()
 
-    fun addToIndex(vararg qi: QuestionItem) {
+    override fun addToIndex(vararg qi: QuestionItem) {
         IndexWriter(index, IndexWriterConfig(analyzer))
             .use { writer ->
                 qi.forEach {
@@ -33,7 +38,7 @@ object QuestionsSearchIndex {
             }
     }
 
-    fun search(searchKey: String): List<Int> {
+    override fun search(searchKey: String): List<Int> {
         val query = MultiFieldQueryParser(
             arrayOf("title", "body"),
             analyzer

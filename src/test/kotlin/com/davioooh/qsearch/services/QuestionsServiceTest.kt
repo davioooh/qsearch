@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test
 internal class QuestionsServiceTest {
 
     private val questionsApi = mockk<QuestionsApi>(relaxed = true)
-    private val userFavoritesService = QuestionsService(questionsApi, QuestionsCache)
+    private val userFavoritesService = QuestionsService(questionsApi, QuestionsCache, QuestionsSearchIndex)
 
     private val questions = listOf(
         question(1, "Q1"),

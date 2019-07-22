@@ -8,7 +8,8 @@ import org.slf4j.LoggerFactory
 
 class QuestionsService(
     private val questionsApi: QuestionsApi,
-    private val cache: CacheFacade<QuestionsWrapper>
+    private val cache: CacheFacade<QuestionsWrapper>,
+    private val textSearchIndex: FullTextSearchIndex<QuestionItem, Int>
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -39,7 +40,7 @@ class QuestionsService(
                 .also { if (it.isNotEmpty()) cache.put(accessToken, QuestionsWrapper(it)) }
                 .also { q ->
                     q.toQuestionItemArray()
-                        .let { QuestionsSearchIndex.addToIndex(*it) }
+                        .let { textSearchIndex.addToIndex(*it) }
                     logger.debug("Favorite questions for user ($userId) indexed for search")
                 }
         } else {
@@ -67,7 +68,7 @@ class QuestionsService(
     }
 
     private fun filterQuestionsByCriteria(questions: Questions, searchCriteria: SearchCriteria): Questions {
-        val qids = QuestionsSearchIndex.search(searchCriteria.key)
+        val qids = textSearchIndex.search(searchCriteria.key)
         return questions.filter { qids.contains(it.questionId) }
         // TODO add other search criteria
     }
