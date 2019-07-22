@@ -2,6 +2,10 @@ body {
     min-width: 960px;
 }
 
-span.sort-by-item{
+span.sort-by-item {
     margin-left: 1.5rem;
+}
+
+table.q-list  td {
+    min-width: 5em;
 }

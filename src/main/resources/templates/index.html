@@ -78,16 +78,16 @@
                     <tr th:each="q : ${questions}">
                         <td title="Votes" class="has-text-centered">
                             <p><span class="icon is-small"><i class="fas fa-thumbs-up"></i></span></p>
-                            <p th:text="${q.scoreNice}" class="title is-6"></p>
+                            <p th:text="${q.scoreNice}"></p>
                         </td>
                         <td title="Answers" class="has-text-centered">
                             <p><span class="icon is-small"><i class="fas fa-comment"
                                                               data-fa-transform="flip-h"></i></span></p>
-                            <p th:text="${q.answerCountNice}" class="title is-6"></p>
+                            <p th:text="${q.answerCountNice}"></p>
                         </td>
                         <td title="Views" class="has-text-centered">
                             <p><span class="icon is-small"><i class="fas fa-eye"></i></span></p>
-                            <p th:text="${q.viewCountNice}" class="title is-6"></p>
+                            <p th:text="${q.viewCountNice}"></p>
                         </td>
                         <td>
                             <a th:href="${q.link}" target="_blank">
