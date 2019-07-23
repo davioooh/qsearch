@@ -41,11 +41,12 @@ internal class PaginationBarTest {
             assertThat(paginationBar).isEqualTo(expected)
         }
 
-        private fun configsMax10Pages() = IntRange(1, 10).flatMap { lastPage ->
-            IntRange(1, lastPage).map { currentPage ->
-                PaginationBarConfig(currentPage, lastPage)
+        private fun configsMax10Pages() =
+            IntRange(1, 10).flatMap { lastPage ->
+                IntRange(1, lastPage).map { currentPage ->
+                    PaginationBarConfig(currentPage, lastPage)
+                }
             }
-        }.stream()
 
     }
 
