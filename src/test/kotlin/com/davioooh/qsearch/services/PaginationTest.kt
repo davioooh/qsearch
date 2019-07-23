@@ -57,7 +57,7 @@ internal class PaginationTest {
 
         @Test
         fun `returns page correctly`() {
-            val expectedResult = PageableResult(
+            val expectedResult = PageResult(
                 listOf("de", "ef", "fg"),
                 2,
                 3,

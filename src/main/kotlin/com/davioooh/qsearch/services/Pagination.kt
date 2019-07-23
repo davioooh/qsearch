@@ -9,21 +9,21 @@ data class PaginationCriteria(
     val sortingDirection: SortingDirection = SortingDirection.Asc
 )
 
-data class PageableResult<T>(
+data class PageResult<T>(
     val items: List<T>,
     val page: Int,
     val pageSize: Int,
     val total: Int
 )
 
-fun <T> paginate(items: List<T>, page: Int, pageSize: Int): PageableResult<T> {
+fun <T> paginate(items: List<T>, page: Int, pageSize: Int): PageResult<T> {
     require(items.isNotEmpty()) { "items can't be an empty list" }
     require(page > 0) { "page must be greater than 0" }
     require(pageSize > 0) { "pageSize must be greater than 0" }
     val lastPage = calculateLastPage(items.size, pageSize)
     require(page <= lastPage) { "page can't be greater than $lastPage" }
 
-    return PageableResult(
+    return PageResult(
         items.chunked(pageSize)[page - 1],
         page,
         pageSize,

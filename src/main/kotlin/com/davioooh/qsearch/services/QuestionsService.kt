@@ -18,7 +18,7 @@ class QuestionsService(
         accessToken: String,
         paginationCriteria: PaginationCriteria,
         searchCriteria: SearchCriteria? = null
-    ): PageableResult<Question>? {
+    ): PageResult<Question>? {
         var questions = fetchAllFavorites(accessToken, userId)
 
         if (questions.isEmpty()) return null

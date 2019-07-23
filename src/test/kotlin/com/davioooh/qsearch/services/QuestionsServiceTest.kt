@@ -48,7 +48,7 @@ internal class QuestionsServiceTest {
 
         assertThat(result).isEqualTo(
             if (pageConfig.itemsCount > 0) {
-                PageableResult(
+                PageResult(
                     items.chunked(pageConfig.pageSize)[pageConfig.page - 1],
                     pageConfig.page,
                     pageConfig.pageSize,
