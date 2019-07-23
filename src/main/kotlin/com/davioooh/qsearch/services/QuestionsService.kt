@@ -37,14 +37,24 @@ class QuestionsService(
         var questions = cache.get(accessToken)?.questions ?: listOf()
         if (questions.isEmpty()) {
             questions = fetchFavoritesFromApi(userId, accessToken)
-                .also { if (it.isNotEmpty()) cache.put(accessToken, QuestionsWrapper(it)) }
+                .also {
+                    logger.debug("Retrieved ${it.size} questions for user ($userId) from API call")
+                }
+                .also {
+                    if (it.isNotEmpty()) {
+                        cache.put(accessToken, QuestionsWrapper(it))
+                        logger.debug("Favorite questions for user ($userId) cached in QuestionsCache")
+                    }
+                }
                 .also { q ->
-                    q.toQuestionItemArray()
-                        .let { textSearchIndex.addToIndex(*it) }
-                    logger.debug("Favorite questions for user ($userId) indexed for search")
+                    if (q.isNotEmpty()) {
+                        q.toQuestionItemArray()
+                            .let { textSearchIndex.addToIndex(*it) }
+                        logger.debug("Favorite questions for user ($userId) indexed for search")
+                    }
                 }
         } else {
-            logger.debug("Favorite questions for user ($userId) found in QuestionsCache")
+            logger.debug("Retrieved ${questions.size} questions for user ($userId) from QuestionsCache")
         }
         return questions
     }
@@ -61,7 +71,7 @@ class QuestionsService(
                     pageSize = 100
                 )
             questions.addAll(res.items)
-            logger.debug("Request $i")
+            logger.trace("Favorite questions for user ($userId): retrieved page $i from API call")
             i++
         } while (questions.size < res.total ?: 0)
         return questions
