@@ -18,11 +18,14 @@ class QuestionsService(
         accessToken: String,
         paginationCriteria: PaginationCriteria,
         searchCriteria: SearchCriteria? = null
-    ): PageableResult<Question> {
+    ): PageableResult<Question>? {
         var questions = fetchAllFavorites(accessToken, userId)
+
+        if (questions.isEmpty()) return null
 
         if (searchCriteria?.isClear == false) {
             questions = filterQuestionsByCriteria(questions, searchCriteria)
+            if (questions.isEmpty()) return null
         }
 
         val sQuestions = questions.sortBy(

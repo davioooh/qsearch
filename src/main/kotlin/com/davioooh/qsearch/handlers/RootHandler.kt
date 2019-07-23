@@ -30,9 +30,9 @@ class RootHandler(
                 query?.let { SearchCriteria(it) }
             )
 
-        val paginationBar =
+        val paginationBar = favResult?.let {
             PaginationBar.from(
-                favResult.page, calculateLastPage(favResult.total, pageSize),
+                it.page, calculateLastPage(it.total, pageSize),
                 baseUrl = PaginationBar.buildUrl(
                     "/", listOf(
                         "sortBy" to sortBy.toString(),
@@ -40,13 +40,14 @@ class RootHandler(
                     )
                 )
             )
+        }
 
         ctx.render(
             "/templates/index.html",
             mapOf(
-                "questions" to favResult.items,
+                "questions" to favResult?.items,
                 "pageSize" to pageSize,
-                "totalItems" to favResult.total,
+                "totalItems" to (favResult?.total ?: 0),
                 "sortBy" to sortBy.toString(),
                 "sortDir" to sortDir.toString(),
                 "paginationBar" to paginationBar

@@ -1,94 +1,99 @@
 package com.davioooh.qsearch.services
 
-import com.davioooh.qsearch.authentication.AuthenticationInfoHolder
 import com.davioooh.qsearch.authentication.authenticatedUser
-import com.davioooh.qsearch.caching.QuestionsCache
+import com.davioooh.qsearch.caching.CacheFacade
+import com.davioooh.qsearch.caching.QuestionsWrapper
 import com.davioooh.qsearch.stackexchange.api.QuestionsApi
 import com.davioooh.qsearch.stackexchange.api.model.ResultWrapper
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkObject
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
 internal class QuestionsServiceTest {
-
     private val questionsApi = mockk<QuestionsApi>(relaxed = true)
-    private val userFavoritesService = QuestionsService(questionsApi, QuestionsCache, QuestionsSearchIndex)
-
-    private val questions = listOf(
-        question(1, "Q1"),
-        question(2, "Q2"),
-        question(3, "Q3"),
-        question(4, "Q4"),
-        question(5, "Q5")
-    )
+    private val userFavoritesService = QuestionsService(questionsApi, NoopCache(), NoopSearchIndex())
 
     @BeforeEach
     fun init() {
         clearAllMocks()
     }
 
-    @Test
-    fun `when all items fits in a page returns page correctly`() {
-        val page = 1
-        val pageSize = 25
-        testUserFavoritesPage(
-            page,
-            pageSize,
-            PageableResult(
-                questions,
-                page,
-                pageSize,
-                questions.size
-            )
-        )
-    }
-
-    @Test
-    fun `when items span on multiple pages returns page correctly`() {
-        val page = 2
-        val pageSize = 3
-        testUserFavoritesPage(
-            page,
-            pageSize,
-            PageableResult(
-                questions.chunked(3)[1],
-                page,
-                pageSize,
-                questions.size
-            )
-        )
-    }
-
-    private fun <T> testUserFavoritesPage(page: Int, pageSize: Int, expectedResult: PageableResult<T>) {
+    @ParameterizedTest
+    @MethodSource("itemsConfigurations")
+    fun `returns ALL favorites questions correctly`(pageConfig: QuestionsPageConfig) {
         val authenticatedUser = authenticatedUser()
-
-        mockkObject(AuthenticationInfoHolder)
-        every { AuthenticationInfoHolder.currentUser } returns authenticatedUser
+        val items = questionsList(pageConfig.itemsCount)
 
         every {
             questionsApi.fetchUserFavoriteQuestions(
                 authenticatedUser.accessToken,
                 authenticatedUser.userId
             )
-        } returns resultWrapper(questions)
+        } returns ResultWrapper(
+            hasMore = false,
+            items = items,
+            quotaMax = 999,
+            quotaRemaining = 999
+        )
 
         val result = userFavoritesService.getUserFavorites(
             authenticatedUser.userId,
             authenticatedUser.accessToken,
-            PaginationCriteria(page, pageSize)
+            PaginationCriteria(pageConfig.page, pageConfig.pageSize)
         )
 
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result).isEqualTo(
+            if (pageConfig.itemsCount > 0) {
+                PageableResult(
+                    items.chunked(pageConfig.pageSize)[pageConfig.page - 1],
+                    pageConfig.page,
+                    pageConfig.pageSize,
+                    items.size
+                )
+            } else null
+        )
     }
 
-    private fun <T> resultWrapper(items: List<T> = listOf<T>()) = ResultWrapper(
-        hasMore = false,
-        items = items,
-        quotaMax = 999,
-        quotaRemaining = 999
-    )
+    private fun itemsConfigurationsZeroItems() =
+        IntRange(1, 25).filter { it % 3 == 0 } // step 3
+            .map { pageSize ->
+                QuestionsPageConfig(1, pageSize, 0)
+            }
+
+    private fun itemsConfigurations() =
+        IntRange(1, 100).filter { it % 5 == 0 } // step 5
+            .flatMap { itemsCount ->
+                IntRange(1, 25).filter { it % 3 == 0 } // step 3
+                    .flatMap { pageSize ->
+                        IntRange(1, calculateLastPage(itemsCount, pageSize)).filter { it % 2 == 0 } // step 2
+                            .map { currentPage -> QuestionsPageConfig(currentPage, pageSize, itemsCount) }
+                    }
+            } + itemsConfigurationsZeroItems()
+
+    data class QuestionsPageConfig(val page: Int, val pageSize: Int, val itemsCount: Int)
+
+    class NoopCache : CacheFacade<QuestionsWrapper> {
+        override fun put(key: String, value: QuestionsWrapper): QuestionsWrapper {
+            return value
+        }
+
+        override fun get(key: String): QuestionsWrapper? {
+            return null
+        }
+
+    }
+
+    class NoopSearchIndex : FullTextSearchIndex<QuestionItem, Int> {
+        override fun addToIndex(vararg item: QuestionItem) {
+        }
+
+        override fun search(searchKey: String): List<Int> {
+            return listOf()
+        }
+
+    }
 }
