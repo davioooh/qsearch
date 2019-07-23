@@ -18,7 +18,20 @@
             A personal archive manager for <strong>StackOverflow</strong>!
         </p>
 
-        <nav class="level">
+        <section th:if="${totalItems == 0}" class="hero is-warning">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">
+                        Nothing found in your favorites list!
+                    </h1>
+                    <h2 class="subtitle">
+                        Add some interesting question!
+                    </h2>
+                </div>
+            </div>
+        </section>
+
+        <nav th:if="${totalItems > 0}" class="level">
             <div class="level-left">
                 <div class="level-item">
                     <span>Sort by:</span>
@@ -42,7 +55,7 @@
             </div>
         </nav>
 
-        <main class="columns">
+        <main th:if="${totalItems > 0}" class="columns">
             <div class="column is-one-quarter">
                 <div class="field has-addons">
                     <p class="control">
