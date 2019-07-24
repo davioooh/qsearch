@@ -16,17 +16,11 @@ class QuestionsService(
     fun getUserFavorites(
         userId: Int,
         accessToken: String,
-        paginationCriteria: PaginationCriteria,
-        searchCriteria: SearchCriteria? = null
+        paginationCriteria: PaginationCriteria
     ): PageResult<Question>? {
-        var questions = fetchAllFavorites(accessToken, userId)
+        val questions = fetchAllFavorites(accessToken, userId)
 
         if (questions.isEmpty()) return null
-
-        if (searchCriteria?.isClear == false) {
-            questions = filterQuestionsByCriteria(questions, searchCriteria)
-            if (questions.isEmpty()) return null
-        }
 
         val sQuestions = questions.sortBy(
             paginationCriteria.sortingCriteria,
@@ -78,6 +72,32 @@ class QuestionsService(
             i++
         } while (questions.size < res.total ?: 0)
         return questions
+    }
+
+    fun searchUserFavorites(
+        userId: Int,
+        accessToken: String,
+        paginationCriteria: PaginationCriteria,
+        searchCriteria: SearchCriteria
+    ): SearchPageResult<Question>? {
+        val allQuestions = fetchAllFavorites(accessToken, userId)
+
+        if (allQuestions.isEmpty()) return null
+
+        val filteredQuestions =
+            if (searchCriteria.isClear) allQuestions
+            else filterQuestionsByCriteria(allQuestions, searchCriteria)
+
+        val sQuestions = filteredQuestions.sortBy(
+            paginationCriteria.sortingCriteria,
+            paginationCriteria.sortingDirection
+        )
+
+        return SearchPageResult(
+            paginate(sQuestions, paginationCriteria.page, paginationCriteria.pageSize),
+            allQuestions.size,
+            searchCriteria
+        )
     }
 
     private fun filterQuestionsByCriteria(questions: Questions, searchCriteria: SearchCriteria): Questions {

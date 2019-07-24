@@ -10,10 +10,10 @@ data class PaginationCriteria(
 )
 
 data class PageResult<T>(
-    val items: List<T>,
+    val pageItems: List<T>,
     val page: Int,
     val pageSize: Int,
-    val total: Int
+    val totalItemsCount: Int
 )
 
 fun <T> paginate(items: List<T>, page: Int, pageSize: Int): PageResult<T> {
