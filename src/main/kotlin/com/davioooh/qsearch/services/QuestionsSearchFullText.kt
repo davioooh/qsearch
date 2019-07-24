@@ -46,7 +46,7 @@ object QuestionsSearchIndex : FullTextSearchIndex<QuestionItem, Int> {
 
         val docs = DirectoryReader.open(index).use { indexReader ->
             val searcher = IndexSearcher(indexReader)
-            val topDocs = searcher.search(query, 10)
+            val topDocs = searcher.search(query, 1_000_000)
             topDocs.scoreDocs.map { searcher.doc(it.doc) }
         }
         return docs.map { it.get("id").toInt() }
