@@ -18,7 +18,7 @@
             A personal archive manager for <strong>StackOverflow</strong>!
         </p>
 
-        <section th:if="${totalItems == 0}" class="hero is-warning">
+        <section th:if="${pageResult.totalItemsCount == 0}" class="hero is-warning">
             <div class="hero-body">
                 <div class="container">
                     <h1 class="title">
@@ -31,7 +31,7 @@
             </div>
         </section>
 
-        <nav th:if="${totalItems > 0}" class="level">
+        <nav th:if="${pageResult.totalItemsCount > 0}" class="level">
             <div class="level-left">
                 <div class="level-item">
                     <span>Sort by:</span>
@@ -48,14 +48,16 @@
 
             <div class="level-right">
                 <div class="level-item">
-                    <p class="subtitle is-5">
-                        <strong th:text="${totalItems}">123</strong> questions
+                    <p>
+                        <span th:if="${pageResult.filteredItemsCount < pageResult.totalItemsCount}">
+                            Showing <span th:text="${pageResult.filteredItemsCount}"></span> of</span>
+                        <strong th:text="${pageResult.totalItemsCount}">123</strong> questions
                     </p>
                 </div>
             </div>
         </nav>
 
-        <main th:if="${totalItems > 0}" class="columns">
+        <main th:if="${pageResult.totalItemsCount > 0}" class="columns">
             <div class="column is-one-quarter">
                 <div class="field has-addons">
                     <p class="control">
@@ -88,7 +90,7 @@
 
             <div class="column">
                 <table class="table is-striped is-fullwidth is-hoverable q-list">
-                    <tr th:each="q : ${questions}">
+                    <tr th:each="q : ${pageResult.pageItems}">
                         <td title="Votes" class="has-text-centered">
                             <p><span class="icon is-small"><i class="fas fa-thumbs-up"></i></span></p>
                             <p th:text="${q.scoreNice}"></p>
@@ -110,7 +112,7 @@
                         </td>
                     </tr>
                 </table>
-                <div>
+                <div th:if="${paginationBar != null}">
                     <div th:replace="templates/pagination.html :: nav ( ${paginationBar} )"></div>
                 </div>
             </div>

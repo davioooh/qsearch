@@ -4,6 +4,7 @@ import com.davioooh.qsearch.authentication.AuthenticationInfoHolder
 import com.davioooh.qsearch.model.PaginationBar
 import com.davioooh.qsearch.services.PaginationCriteria
 import com.davioooh.qsearch.services.QuestionsService
+import com.davioooh.qsearch.services.SearchCriteria
 import com.davioooh.qsearch.services.SortingCriteria.Activity
 import com.davioooh.qsearch.services.SortingDirection.Desc
 import com.davioooh.qsearch.services.calculateLastPage
@@ -19,33 +20,34 @@ class RootHandler(
         val pageSize = DEFAULT_PAGE_SIZE
         val sortBy = ctx.queryParam("sortBy")?.let { enumValueOrDefault(it, Activity) } ?: Activity
         val sortDir = ctx.queryParam("sortDir")?.let { enumValueOrDefault(it, Desc) } ?: Desc
-        //val query = ctx.queryParam("q")
+        val query = ctx.queryParam("q") ?: ""
 
-        val favResult =
-            questionsService.getUserFavorites(
+        val pageResult =
+            questionsService.searchUserFavorites(
                 AuthenticationInfoHolder.currentUser.userId,
                 AuthenticationInfoHolder.currentUser.accessToken,
-                PaginationCriteria(page, pageSize, sortBy, sortDir)
+                PaginationCriteria(page, pageSize, sortBy, sortDir),
+                SearchCriteria(query)
             )
 
-        val paginationBar = favResult?.let {
-            PaginationBar.from(
-                it.page, calculateLastPage(it.totalItemsCount, pageSize),
-                baseUrl = PaginationBar.buildUrl(
-                    "/", listOf(
-                        "sortBy" to sortBy.toString(),
-                        "sortDir" to sortDir.toString()
+        val paginationBar =
+            if (pageResult != null && pageResult.filteredItemsCount > 0) {
+                PaginationBar.from(
+                    pageResult.page, calculateLastPage(pageResult.filteredItemsCount, pageSize),
+                    baseUrl = PaginationBar.buildUrl(
+                        "/",
+                        listOf(
+                            "sortBy" to sortBy.toString(),
+                            "sortDir" to sortDir.toString()
+                        )
                     )
                 )
-            )
-        }
+            } else null
 
         ctx.render(
             "/templates/index.html",
             mapOf(
-                "questions" to favResult?.pageItems,
-                "pageSize" to pageSize,
-                "totalItems" to (favResult?.totalItemsCount ?: 0),
+                "pageResult" to pageResult,
                 "sortBy" to sortBy.toString(),
                 "sortDir" to sortDir.toString(),
                 "paginationBar" to paginationBar
