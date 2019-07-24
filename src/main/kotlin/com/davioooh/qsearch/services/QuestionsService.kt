@@ -13,22 +13,22 @@ class QuestionsService(
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    fun getUserFavorites(
-        userId: Int,
-        accessToken: String,
-        paginationCriteria: PaginationCriteria
-    ): PageResult<Question>? {
-        val questions = fetchAllFavorites(accessToken, userId)
-
-        if (questions.isEmpty()) return null
-
-        val sQuestions = questions.sortBy(
-            paginationCriteria.sortingCriteria,
-            paginationCriteria.sortingDirection
-        )
-
-        return paginate(sQuestions, paginationCriteria.page, paginationCriteria.pageSize)
-    }
+//    fun getUserFavorites(
+//        userId: Int,
+//        accessToken: String,
+//        paginationCriteria: PaginationCriteria
+//    ): PageResult<Question>? {
+//        val questions = fetchAllFavorites(accessToken, userId)
+//
+//        if (questions.isEmpty()) return null
+//
+//        val sQuestions = questions.sortBy(
+//            paginationCriteria.sortingCriteria,
+//            paginationCriteria.sortingDirection
+//        )
+//
+//        return paginate(sQuestions, paginationCriteria.page, paginationCriteria.pageSize)
+//    }
 
     private fun fetchAllFavorites(accessToken: String, userId: Int): Questions {
         var questions = cache.get(accessToken)?.questions ?: listOf()
@@ -93,11 +93,11 @@ class QuestionsService(
             paginationCriteria.sortingDirection
         )
 
-        return SearchPageResult(
-            paginate(sQuestions, paginationCriteria.page, paginationCriteria.pageSize),
-            allQuestions.size,
-            searchCriteria
-        )
+        val filteredPageResult =
+            if (sQuestions.isEmpty()) PageResult(listOf(), 1, paginationCriteria.pageSize, 0)
+            else paginate(sQuestions, paginationCriteria.page, paginationCriteria.pageSize)
+
+        return SearchPageResult(filteredPageResult, allQuestions.size, searchCriteria)
     }
 
     private fun filterQuestionsByCriteria(questions: Questions, searchCriteria: SearchCriteria): Questions {

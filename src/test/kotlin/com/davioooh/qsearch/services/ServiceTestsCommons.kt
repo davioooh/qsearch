@@ -25,4 +25,4 @@ fun question(
     viewCount = views
 )
 
-fun questionsList(size: Int) = IntRange(1, size).map { question(1, "Q$it") }
+fun questionsList(size: Int) = IntRange(1, size).map { question(it, "Q$it") }
