@@ -5,11 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.davioooh.qsearch</groupId>
-    <artifactId>qsearch-2</artifactId>
-    <version>0.2.10</version>
+    <artifactId>qsearch</artifactId>
+    <version>0.2.0</version>
     <packaging>jar</packaging>
-
-    <name>qsearch-2</name>
 
     <properties>
         <main.class>com.davioooh.qsearch.AppKt</main.class>
@@ -141,7 +139,7 @@
     </dependencies>
 
     <build>
-        <finalName>qsearch2</finalName>
+        <finalName>qsearch</finalName>
 
         <sourceDirectory>src/main/kotlin</sourceDirectory>
         <testSourceDirectory>src/test/kotlin</testSourceDirectory>
