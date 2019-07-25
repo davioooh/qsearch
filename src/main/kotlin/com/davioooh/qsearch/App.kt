@@ -3,6 +3,7 @@ package com.davioooh.qsearch
 import com.davioooh.qsearch.authentication.*
 import com.davioooh.qsearch.caching.QuestionsCache
 import com.davioooh.qsearch.caching.UsersCache
+import com.davioooh.qsearch.config.*
 import com.davioooh.qsearch.handlers.RootHandler
 import com.davioooh.qsearch.services.QuestionsSearchIndex
 import com.davioooh.qsearch.services.QuestionsService
@@ -31,27 +32,27 @@ fun main(args: Array<String>) {
     val accessTokenPersistence =
         CookieAccessTokenPersistence(
             objMapper,
-            AesEncryption(System.getProperty("encryptionKey").toByteArray())
+            AesEncryption(ENCRYPTION_KEY.toByteArray())
         )
 
     val apiConfig = ApiClientConfig(
         "stackoverflow",
-        System.getProperty("key"),
+        SO_API_KEY,
         "!9Z(-x-Ptf"
     )
 
     val usersApi = UsersApi(apiConfig)
     val questionsApi = QuestionsApi(apiConfig)
     val authApi = AuthApi(
-        System.getProperty("clientId"),
-        System.getProperty("clientSecret"),
-        System.getProperty("redirectUri")
+        SO_API_CLIENT_ID,
+        SO_API_CLIENT_SECRET,
+        SO_API_REDIRECT_URI
     )
 
     val oAuthRedirectHandler = OAuthRedirectHandler(
-        System.getProperty("clientId"),
-        System.getProperty("scopes").split(", "),
-        System.getProperty("redirectUri"),
+        SO_API_CLIENT_ID,
+        SO_API_SCOPES,
+        SO_API_REDIRECT_URI,
         csrfPersistence
     )
 
@@ -73,7 +74,7 @@ fun main(args: Array<String>) {
                     )
                 )
         }
-        .start()
+        .start(serverPort())
         .routes {
             // > auth
             get("/back", OAuthCallbackHandler(authApi, csrfPersistence, accessTokenPersistence))
@@ -82,4 +83,3 @@ fun main(args: Array<String>) {
             get("/", RootHandler(questionsService))
         }
 }
-
