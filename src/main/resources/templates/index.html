@@ -112,9 +112,8 @@
                         </td>
                     </tr>
                 </table>
-                <div th:if="${paginationBar != null}">
-                    <div th:replace="templates/pagination.html :: nav ( ${paginationBar} )"></div>
-                </div>
+                <div th:if="${paginationBar != null}"
+                     th:replace="templates/fragments/pagination.html :: nav ( ${paginationBar} )"></div>
             </div>
         </main>
     </div>
