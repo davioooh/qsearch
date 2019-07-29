@@ -5,6 +5,7 @@ import com.davioooh.qsearch.caching.QuestionsCache
 import com.davioooh.qsearch.caching.UsersCache
 import com.davioooh.qsearch.config.*
 import com.davioooh.qsearch.handlers.RootHandler
+import com.davioooh.qsearch.handlers.ajax.SearchFavoritesHandler
 import com.davioooh.qsearch.services.QuestionsSearchIndex
 import com.davioooh.qsearch.services.QuestionsService
 import com.davioooh.qsearch.services.UsersService
@@ -19,6 +20,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.get
+import io.javalin.apibuilder.ApiBuilder.path
 import io.javalin.plugin.json.JavalinJackson
 
 fun main(args: Array<String>) {
@@ -81,5 +83,10 @@ fun main(args: Array<String>) {
 
             // >
             get("/", RootHandler(questionsService))
+
+            // > ajax
+            path("/ajax") {
+                get("/favorites", SearchFavoritesHandler(questionsService))
+            }
         }
 }
