@@ -1,5 +1,6 @@
 package com.davioooh.qsearch.services
 
+import com.davioooh.qsearch.stackexchange.api.model.Question
 import kotlin.math.ceil
 
 data class PaginationCriteria(
@@ -11,23 +12,29 @@ data class PaginationCriteria(
 
 data class PageResult<T>(
     val pageItems: List<T>,
-    val page: Int,
-    val pageSize: Int,
-    val totalItemsCount: Int
+    val totalItemsCount: Int,
+    val paginationCriteria: PaginationCriteria
 )
 
-fun <T> paginate(items: List<T>, page: Int, pageSize: Int): PageResult<T> {
-    require(items.isNotEmpty()) { "items can't be an empty list" }
-    require(page > 0) { "page must be greater than 0" }
-    require(pageSize > 0) { "pageSize must be greater than 0" }
-    val lastPage = calculateLastPage(items.size, pageSize)
-    require(page <= lastPage) { "page can't be greater than $lastPage" }
+fun buildPage(
+    questions: Questions,
+    paginationCriteria: PaginationCriteria
+): PageResult<Question> {
+    require(questions.isNotEmpty()) { "questions can't be an empty list" }
+    require(paginationCriteria.page > 0) { "paginationCriteria.page must be greater than 0" }
+    require(paginationCriteria.pageSize > 0) { "paginationCriteria.pageSize must be greater than 0" }
+    val lastPage = calculateLastPage(questions.size, paginationCriteria.pageSize)
+    require(paginationCriteria.page <= lastPage) { "paginationCriteria.page can't be greater than $lastPage" }
+
+    val sQuestions = questions.sortBy(
+        paginationCriteria.sortingCriteria,
+        paginationCriteria.sortingDirection
+    )
 
     return PageResult(
-        items.chunked(pageSize)[page - 1],
-        page,
-        pageSize,
-        items.size
+        sQuestions.chunked(paginationCriteria.pageSize)[paginationCriteria.page - 1],
+        sQuestions.size,
+        paginationCriteria
     )
 }
 
