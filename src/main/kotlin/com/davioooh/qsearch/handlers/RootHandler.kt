@@ -33,7 +33,7 @@ class RootHandler(
         val paginationBar =
             if (pageResult != null && pageResult.filteredItemsCount > 0) {
                 PaginationBar.from(
-                    pageResult.page, calculateLastPage(pageResult.filteredItemsCount, pageSize),
+                    pageResult.paginationCriteria.page, calculateLastPage(pageResult.filteredItemsCount, pageSize),
                     baseUrl = PaginationBar.buildUrl(
                         "/",
                         listOf(
@@ -48,8 +48,6 @@ class RootHandler(
             "/templates/index.html",
             mapOf(
                 "pageResult" to pageResult,
-                "sortBy" to sortBy.toString(),
-                "sortDir" to sortDir.toString(),
                 "paginationBar" to paginationBar
             )
         )
