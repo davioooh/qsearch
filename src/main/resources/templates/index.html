@@ -15,7 +15,7 @@
             SO Q-Search
         </h1>
         <p class="subtitle">
-            A personal archive manager for <strong>StackOverflow</strong>!
+            A personal favorite manager for <strong>StackOverflow</strong>!
         </p>
 
         <section th:if="${pageResult.totalItemsCount == 0}" class="hero is-warning">
@@ -33,9 +33,9 @@
 
         <nav th:if="${pageResult.totalItemsCount > 0}" class="level">
             <div class="level-left">
-                <div class="level-item">
+                <div class="level-item" th:with="sortBy=${pageResult.paginationCriteria.sortingCriteria.toString()}">
                     <span>Sort by:</span>
-                    <span class="sort-by-item"><a th:classappend="${sortBy == 'Activity'} ? has-text-weight-semibold"
+                    <span class="sort-by-item"><a th:classappend="${sortBy eq 'Activity'} ? has-text-weight-semibold"
                                                   th:href="@{/(sortBy=Activity)}">Activity</a></span>
                     <span class="sort-by-item"><a th:classappend="${sortBy == 'Vote'} ? has-text-weight-semibold"
                                                   th:href="@{/(sortBy=Vote)}">Vote</a></span>
@@ -59,7 +59,8 @@
 
         <main th:if="${pageResult.totalItemsCount > 0}" class="columns">
             <div class="column is-one-quarter">
-                <div class="field has-addons">
+                <div class="field has-addons"
+                     th:with="sortDir=${pageResult.paginationCriteria.sortingDirection.toString()}">
                     <p class="control">
                         <a class="button" th:href="@{/(sortBy=${sortBy},sortDir=Desc)}"
                            th:classappend="${sortDir == 'Desc'} ? 'is-info is-selected'">

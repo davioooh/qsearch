@@ -6,37 +6,37 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 internal class PaginationTest {
-    private val itemsList = listOf("ab", "bc", "cd", "de", "ef", "fg", "gh", "hi")
+    private val questions = questionsList(8)
 
     @Nested
-    inner class PaginateFun {
+    inner class BuildPageFun {
 
         @Test
         fun `when page is less than 0 throws an exception`() {
             assertThatExceptionOfType(IllegalArgumentException::class.java)
-                .isThrownBy { paginate(itemsList, -1, 25) }
-                .withMessage("page must be greater than 0")
+                .isThrownBy { buildPage(questions, PaginationCriteria(-1, 25)) }
+                .withMessage("paginationCriteria.page must be greater than 0")
         }
 
         @Test
         fun `when page is 0 throws an exception`() {
             assertThatExceptionOfType(IllegalArgumentException::class.java)
-                .isThrownBy { paginate(itemsList, 0, 25) }
-                .withMessage("page must be greater than 0")
+                .isThrownBy { buildPage(questions, PaginationCriteria(0, 25)) }
+                .withMessage("paginationCriteria.page must be greater than 0")
         }
 
         @Test
         fun `when pageSize is less than 0 throws an exception`() {
             assertThatExceptionOfType(IllegalArgumentException::class.java)
-                .isThrownBy { paginate(itemsList, 1, -1) }
-                .withMessage("pageSize must be greater than 0")
+                .isThrownBy { buildPage(questions, PaginationCriteria(1, -1)) }
+                .withMessage("paginationCriteria.pageSize must be greater than 0")
         }
 
         @Test
         fun `when pageSize is 0 throws an exception`() {
             assertThatExceptionOfType(IllegalArgumentException::class.java)
-                .isThrownBy { paginate(itemsList, 1, 0) }
-                .withMessage("pageSize must be greater than 0")
+                .isThrownBy { buildPage(questions, PaginationCriteria(1, 0)) }
+                .withMessage("paginationCriteria.pageSize must be greater than 0")
         }
 
         @Test
@@ -44,27 +44,26 @@ internal class PaginationTest {
             val expectedLastPage = 1
 
             assertThatExceptionOfType(IllegalArgumentException::class.java)
-                .isThrownBy { paginate(itemsList, 2, 10) }
-                .withMessage("page can't be greater than $expectedLastPage")
+                .isThrownBy { buildPage(questions, PaginationCriteria(2, 10)) }
+                .withMessage("paginationCriteria.page can't be greater than $expectedLastPage")
         }
 
         @Test
         fun `when items is empty throws an exception`() {
             assertThatExceptionOfType(IllegalArgumentException::class.java)
-                .isThrownBy { paginate(listOf<Any>(), 2, 10) }
-                .withMessage("items can't be an empty list")
+                .isThrownBy { buildPage(listOf(), PaginationCriteria(2, 10)) }
+                .withMessage("questions can't be an empty list")
         }
 
         @Test
         fun `returns page correctly`() {
             val expectedResult = PageResult(
-                listOf("de", "ef", "fg"),
-                2,
-                3,
-                8
+                questions.subList(3, 6),
+                questions.size,
+                PaginationCriteria(2, 3)
             )
 
-            val result = paginate(itemsList, 2, 3)
+            val result = buildPage(questions, PaginationCriteria(2, 3))
 
             assertThat(result).isNotNull()
             assertThat(result).isEqualTo(expectedResult)
@@ -75,7 +74,7 @@ internal class PaginationTest {
     inner class CalculateLastPageFun {
         @Test
         fun `calculate last page correctly`() {
-            assertThat(calculateLastPage(itemsList.size, 3)).isEqualTo(3)
+            assertThat(calculateLastPage(questions.size, 3)).isEqualTo(3)
         }
     }
 }

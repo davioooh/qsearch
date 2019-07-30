@@ -24,42 +24,6 @@ internal class QuestionsServiceTest {
         clearAllMocks()
     }
 
-//    @ParameterizedTest
-//    @MethodSource("itemsConfigurations")
-//    fun `returns ALL favorites questions correctly`(pageConfig: QuestionsPageConfig) {
-//        val authenticatedUser = authenticatedUser()
-//        val items = questionsList(pageConfig.itemsCount)
-//
-//        every {
-//            questionsApi.fetchUserFavoriteQuestions(
-//                authenticatedUser.accessToken,
-//                authenticatedUser.userId
-//            )
-//        } returns ResultWrapper(
-//            hasMore = false,
-//            items = items,
-//            quotaMax = 999,
-//            quotaRemaining = 999
-//        )
-//
-//        val result = userFavoritesService.getUserFavorites(
-//            authenticatedUser.userId,
-//            authenticatedUser.accessToken,
-//            PaginationCriteria(pageConfig.page, pageConfig.pageSize)
-//        )
-//
-//        assertThat(result).isEqualTo(
-//            if (pageConfig.itemsCount > 0) {
-//                PageResult(
-//                    items.chunked(pageConfig.pageSize)[pageConfig.page - 1],
-//                    pageConfig.page,
-//                    pageConfig.pageSize,
-//                    items.size
-//                )
-//            } else null
-//        )
-//    }
-
     @ParameterizedTest
     @MethodSource("itemsConfigurations")
     fun `returns favorites questions filtered by search criteria`(pageConfig: QuestionsPageConfig) {
@@ -99,11 +63,10 @@ internal class QuestionsServiceTest {
                             filteredItems.chunked(pageConfig.pageSize)[pageConfig.page - 1]
                         else
                             listOf(),
-                        pageConfig.page,
-                        pageConfig.pageSize,
-                        filteredItems.size
+                        filteredItems.size,
+                        PaginationCriteria(pageConfig.page, pageConfig.pageSize)
                     ),
-                    allItems.size,
+                    pageConfig.itemsCount,
                     searchCriteria
                 )
             } else null

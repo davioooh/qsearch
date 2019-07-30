@@ -11,7 +11,6 @@ data class SearchPageResult<T>(
     val searchCriteria: SearchCriteria
 ) {
     val pageItems = pageResult.pageItems
-    val page = pageResult.page
-    val pageSize = pageResult.pageSize
+    val paginationCriteria = pageResult.paginationCriteria
     val filteredItemsCount = pageResult.totalItemsCount
 }
