@@ -6,13 +6,12 @@
     <title>SO Q-Search</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/main.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 </head>
 <body>
-<section class="section">
+<section class="section" id="app">
     <div class="container">
         <h1 class="title">
-            SO Q-Search
+            SO Q-Search {{message}}
         </h1>
         <p class="subtitle">
             A personal favorite manager for <strong>StackOverflow</strong>!
@@ -119,5 +118,8 @@
         </main>
     </div>
 </section>
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="/js/main.js"></script>
 </body>
 </html>
