@@ -7,7 +7,7 @@ import com.davioooh.qsearch.utils.enumValueOrDefault
 import io.javalin.http.Context
 import io.javalin.http.Handler
 
-class SearchFavoritesHandler(
+class SearchFavoritesHandler( // TODO test
     private val questionsService: QuestionsService
 ) : Handler {
     override fun handle(ctx: Context) {
@@ -30,7 +30,7 @@ class SearchFavoritesHandler(
         val paginationBar =
             if (pageResult != null && pageResult.filteredItemsCount > 0) {
                 PaginationBar.from(
-                    pageResult.page, calculateLastPage(pageResult.filteredItemsCount, pageSize),
+                    pageResult.paginationCriteria.page, calculateLastPage(pageResult.filteredItemsCount, pageSize),
                     baseUrl = PaginationBar.buildUrl(
                         "/",
                         listOf(
@@ -44,8 +44,6 @@ class SearchFavoritesHandler(
         ctx.json(
             mapOf(
                 "pageResult" to pageResult,
-                "sortBy" to sortBy.toString(),
-                "sortDir" to sortDir.toString(),
                 "paginationBar" to paginationBar
             )
         )
