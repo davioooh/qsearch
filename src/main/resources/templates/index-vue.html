@@ -56,10 +56,10 @@
             <div class="level-right">
                 <div class="level-item">
                     <p>
-                        <span v-if="page.filteredItemsCount < page.totalItemsCount">
-                            Showing <span>{{page.filteredItemsCount}}</span> of
+                        <span v-if="pageResult.filteredItemsCount < pageResult.totalItemsCount">
+                            Showing <span>{{pageResult.filteredItemsCount}}</span> of
                         </span>
-                        <strong>{{page.totalItemsCount}}</strong> questions
+                        <strong>{{pageResult.totalItemsCount}}</strong> questions
                     </p>
                 </div>
             </div>
@@ -100,7 +100,7 @@
 
             <div class="column">
                 <table class="table is-striped is-fullwidth is-hoverable q-list">
-                    <tr v-for="q in page.pageItems">
+                    <tr v-for="q in pageResult.pageItems">
                         <td title="Votes" class="has-text-centered">
                             <p><span class="icon is-small"><i class="fas fa-thumbs-up"></i></span></p>
                             <p>{{q.scoreNice}}</p>
@@ -115,7 +115,7 @@
                             <p>{{q.viewCountNice}}</p>
                         </td>
                         <td>
-                            <a href="${q.link}" target="_blank">
+                            <a v-bind:href="q.link" target="_blank">
                                 <span class="has-text-weight-semibold">{{q.title}}</span>
                                 <!--<span class="icon is-small"><i class="fas fa-external-link-alt"></i></span>-->
                             </a>
@@ -125,18 +125,18 @@
                 <nav class="pagination is-small">
                     <!-- prev/next -->
                     <a class="pagination-previous" disabled v-if="paginationBar.previousButton == null">Previous</a>
-                    <a class="pagination-previous" href="@{${paginationBar.previousButton.url}}"
+                    <a class="pagination-previous" v-on:click="getPage(paginationBar.currentPage - 1)"
                        v-if="paginationBar.previousButton != null">Previous</a>
 
                     <a class="pagination-next" disabled v-if="paginationBar.nextButton == null">Next</a>
-                    <a class="pagination-next" href="@{${paginationBar.nextButton.url}}"
+                    <a class="pagination-next" v-on:click="getPage(paginationBar.currentPage + 1)"
                        v-if="paginationBar.nextButton != null">Next</a>
 
                     <!-- pagination list -->
                     <ul class="pagination-list">
                         <li v-if="paginationBar.firstButton != null">
                             <a class="pagination-link"
-                               href="@{${paginationBar.firstButton.url}}">1</a>
+                               v-on:click="getPage(1)">1</a>
                         </li>
                         <li v-if="paginationBar.firstButton != null">
                             <span class="pagination-ellipsis">&hellip;</span>
@@ -145,14 +145,14 @@
                         <li v-for="btn in paginationBar.buttonsBar">
                             <a class="pagination-link"
                                v-bind:class="isCurrentPage(btn)"
-                               href="@{${btn.url}}">{{btn.text}}</a>
+                               v-on:click="getPage(btn.text)">{{btn.text}}</a>
                         </li>
 
                         <li v-if="paginationBar.lastButton != null">
                             <span class="pagination-ellipsis">&hellip;</span></li>
-                        <li>
+                        <li v-if="paginationBar.lastButton != null">
                             <a class="pagination-link"
-                               href="@{${paginationBar.lastButton.url}}">{{paginationBar.lastButton.text}}</a>
+                               v-on:click="getPage(paginationBar.lastButton.text)">{{paginationBar.lastButton.text}}</a>
                         </li>
 
                     </ul>

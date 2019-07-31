@@ -82,7 +82,6 @@ fun main(args: Array<String>) {
 
             // >
             get("/") { it.render("/templates/index-vue.html") }
-            // FIXME RootHandler(questionsService))
 
             // > ajax
             path("/ajax") {
