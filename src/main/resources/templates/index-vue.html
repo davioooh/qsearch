@@ -35,16 +35,20 @@
                 <div class="level-item">
                     <span>Sort by:</span>
                     <span class="sort-by-item">
-                        <a v-bind:class="isTabActive('Activity')" href="@{/(sortBy=Activity)}">Activity</a>
+                        <a v-bind:class="isSortCriteriaActive('Activity')"
+                           v-on:click="selectSortCriteria('Activity')">Activity</a>
                     </span>
                     <span class="sort-by-item">
-                        <a v-bind:class="isTabActive('Vote')" href="@{/(sortBy=Vote)}">Vote</a>
-                    </span>
-                    <span vbind:class="sort-by-item">
-                        <a v-bind:class="isTabActive('Asked')" href="@{/(sortBy=Asked)}">Asked</a>
+                        <a v-bind:class="isSortCriteriaActive('Vote')"
+                           v-on:click="selectSortCriteria('Vote')">Vote</a>
                     </span>
                     <span class="sort-by-item">
-                        <a v-bind:class="isTabActive('Views')" href="@{/(sortBy=Views)}">Views</a>
+                        <a v-bind:class="isSortCriteriaActive('Asked')"
+                           v-on:click="selectSortCriteria('Asked')">Asked</a>
+                    </span>
+                    <span class="sort-by-item">
+                        <a v-bind:class="isSortCriteriaActive('Views')"
+                           v-on:click="selectSortCriteria('Views')">Views</a>
                     </span>
                 </div>
             </div>
@@ -65,15 +69,17 @@
             <div class="column is-one-quarter">
                 <div class="field has-addons">
                     <p class="control">
-                        <a class="button" href="@{/(sortBy=${sortBy},sortDir=Desc)}"
-                           v-bind:class="isSortDirActive('Desc')">
+                        <a class="button"
+                           v-bind:class="isSortDirectionActive('Desc')"
+                           v-on:click="selectSortDirection('Desc')">
                             <span class="icon is-small"><i class="fas fa-angle-down"></i></span>
                             <span>Desc</span>
                         </a>
                     </p>
                     <p class="control">
-                        <a class="button" href="@{/(sortBy=${sortBy},sortDir=Asc)}"
-                           v-bind:class="isSortDirActive('Asc')">
+                        <a class="button"
+                           v-bind:class="isSortDirectionActive('Asc')"
+                           v-on:click="selectSortDirection('Asc')">
                             <span class="icon is-small"><i class="fas fa-angle-up"></i></span>
                             <span>Asc</span>
                         </a>
