@@ -7,7 +7,7 @@ import com.davioooh.qsearch.utils.enumValueOrDefault
 import io.javalin.http.Context
 import io.javalin.http.Handler
 
-class SearchFavoritesHandler( // TODO test
+class SearchFavoritesHandler(
     private val questionsService: QuestionsService
 ) : Handler {
     override fun handle(ctx: Context) {
