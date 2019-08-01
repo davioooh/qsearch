@@ -4,6 +4,7 @@ import com.davioooh.qsearch.authentication.*
 import com.davioooh.qsearch.caching.QuestionsCache
 import com.davioooh.qsearch.caching.UsersCache
 import com.davioooh.qsearch.config.*
+import com.davioooh.qsearch.handlers.RootHandler
 import com.davioooh.qsearch.handlers.ajax.SearchFavoritesHandler
 import com.davioooh.qsearch.services.QuestionsSearchIndex
 import com.davioooh.qsearch.services.QuestionsService
@@ -81,7 +82,7 @@ fun main(args: Array<String>) {
             get("/back", OAuthCallbackHandler(authApi, csrfPersistence, accessTokenPersistence))
 
             // >
-            get("/") { it.render("/templates/index-vue.html") }
+            get("/", RootHandler())
 
             // > ajax
             path("/ajax") {

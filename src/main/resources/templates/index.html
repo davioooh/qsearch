@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -17,7 +17,7 @@
             A personal favorite manager for <strong>StackOverflow</strong>!
         </p>
 
-        <section th:if="${pageResult.totalItemsCount == 0}" class="hero is-warning">
+        <section v-if="!isPageVisible" class="hero is-warning">
             <div class="hero-body">
                 <div class="container">
                     <h1 class="title">
@@ -30,90 +30,133 @@
             </div>
         </section>
 
-        <nav th:if="${pageResult.totalItemsCount > 0}" class="level">
+        <nav v-if="isPageVisible" class="level">
             <div class="level-left">
-                <div class="level-item" th:with="sortBy=${pageResult.paginationCriteria.sortingCriteria.toString()}">
+                <div class="level-item">
                     <span>Sort by:</span>
-                    <span class="sort-by-item"><a th:classappend="${sortBy eq 'Activity'} ? has-text-weight-semibold"
-                                                  th:href="@{/(sortBy=Activity)}">Activity</a></span>
-                    <span class="sort-by-item"><a th:classappend="${sortBy == 'Vote'} ? has-text-weight-semibold"
-                                                  th:href="@{/(sortBy=Vote)}">Vote</a></span>
-                    <span class="sort-by-item"><a th:classappend="${sortBy == 'Asked'} ? has-text-weight-semibold"
-                                                  th:href="@{/(sortBy=Asked)}">Asked</a></span>
-                    <span class="sort-by-item"><a th:classappend="${sortBy == 'Views'} ? has-text-weight-semibold"
-                                                  th:href="@{/(sortBy=Views)}">Views</a></span>
+                    <span class="sort-by-item">
+                        <a v-bind:class="isSortCriteriaActive('Activity')"
+                           v-on:click="selectSortCriteria('Activity')">Activity</a>
+                    </span>
+                    <span class="sort-by-item">
+                        <a v-bind:class="isSortCriteriaActive('Vote')"
+                           v-on:click="selectSortCriteria('Vote')">Vote</a>
+                    </span>
+                    <span class="sort-by-item">
+                        <a v-bind:class="isSortCriteriaActive('Asked')"
+                           v-on:click="selectSortCriteria('Asked')">Asked</a>
+                    </span>
+                    <span class="sort-by-item">
+                        <a v-bind:class="isSortCriteriaActive('Views')"
+                           v-on:click="selectSortCriteria('Views')">Views</a>
+                    </span>
                 </div>
             </div>
 
             <div class="level-right">
                 <div class="level-item">
                     <p>
-                        <span th:if="${pageResult.filteredItemsCount < pageResult.totalItemsCount}">
-                            Showing <span th:text="${pageResult.filteredItemsCount}"></span> of</span>
-                        <strong th:text="${pageResult.totalItemsCount}">123</strong> questions
+                        <span v-if="pageResult.filteredItemsCount < pageResult.totalItemsCount">
+                            Showing <span>{{pageResult.filteredItemsCount}}</span> of
+                        </span>
+                        <strong>{{pageResult.totalItemsCount}}</strong> questions
                     </p>
                 </div>
             </div>
         </nav>
 
-        <main th:if="${pageResult.totalItemsCount > 0}" class="columns">
+        <main v-if="isPageVisible" class="columns">
             <div class="column is-one-quarter">
-                <div class="field has-addons"
-                     th:with="sortDir=${pageResult.paginationCriteria.sortingDirection.toString()}">
+                <div class="field has-addons">
                     <p class="control">
-                        <a class="button" th:href="@{/(sortBy=${sortBy},sortDir=Desc)}"
-                           th:classappend="${sortDir == 'Desc'} ? 'is-info is-selected'">
+                        <a class="button"
+                           v-bind:class="isSortDirectionActive('Desc')"
+                           v-on:click="selectSortDirection('Desc')">
                             <span class="icon is-small"><i class="fas fa-angle-down"></i></span>
                             <span>Desc</span>
                         </a>
                     </p>
                     <p class="control">
-                        <a class="button" th:href="@{/(sortBy=${sortBy},sortDir=Asc)}"
-                           th:classappend="${sortDir == 'Asc'} ? 'is-info is-selected'">
+                        <a class="button"
+                           v-bind:class="isSortDirectionActive('Asc')"
+                           v-on:click="selectSortDirection('Asc')">
                             <span class="icon is-small"><i class="fas fa-angle-up"></i></span>
                             <span>Asc</span>
                         </a>
                     </p>
                 </div>
 
-                <!--                <div class="field has-addons">-->
-                <!--                    <p class="control">-->
-                <!--                        <input class="input" type="text" placeholder="Find a question">-->
-                <!--                    </p>-->
-                <!--                    <p class="control">-->
-                <!--                        <button class="button">-->
-                <!--                            Search-->
-                <!--                        </button>-->
-                <!--                    </p>-->
-                <!--                </div>-->
+                <div class="field has-addons">
+                    <p class="control">
+                        <input v-model="searchKey" class="input" type="text" placeholder="Find a question">
+                    </p>
+                    <p class="control">
+                        <button class="button" v-on:click="search">
+                            Search
+                        </button>
+                    </p>
+                </div>
             </div>
 
             <div class="column">
                 <table class="table is-striped is-fullwidth is-hoverable q-list">
-                    <tr th:each="q : ${pageResult.pageItems}">
+                    <tr v-for="q in pageResult.pageItems">
                         <td title="Votes" class="has-text-centered">
                             <p><span class="icon is-small"><i class="fas fa-thumbs-up"></i></span></p>
-                            <p th:text="${q.scoreNice}"></p>
+                            <p>{{q.scoreNice}}</p>
                         </td>
                         <td title="Answers" class="has-text-centered">
                             <p><span class="icon is-small"><i class="fas fa-comment"
                                                               data-fa-transform="flip-h"></i></span></p>
-                            <p th:text="${q.answerCountNice}"></p>
+                            <p>{{q.answerCountNice}}</p>
                         </td>
                         <td title="Views" class="has-text-centered">
                             <p><span class="icon is-small"><i class="fas fa-eye"></i></span></p>
-                            <p th:text="${q.viewCountNice}"></p>
+                            <p>{{q.viewCountNice}}</p>
                         </td>
                         <td>
-                            <a th:href="${q.link}" target="_blank">
-                                <span th:utext="${q.title}" class="has-text-weight-semibold"></span>
+                            <a v-bind:href="q.link" target="_blank">
+                                <span class="has-text-weight-semibold">{{q.title}}</span>
                                 <!--<span class="icon is-small"><i class="fas fa-external-link-alt"></i></span>-->
                             </a>
                         </td>
                     </tr>
                 </table>
-                <div th:if="${paginationBar != null}"
-                     th:replace="templates/fragments/pagination.html :: nav ( ${paginationBar} )"></div>
+                <nav class="pagination is-small">
+                    <!-- prev/next -->
+                    <a class="pagination-previous" disabled v-if="paginationBar.previousButton == null">Previous</a>
+                    <a class="pagination-previous" v-on:click="getPage(paginationBar.currentPage - 1)"
+                       v-if="paginationBar.previousButton != null">Previous</a>
+
+                    <a class="pagination-next" disabled v-if="paginationBar.nextButton == null">Next</a>
+                    <a class="pagination-next" v-on:click="getPage(paginationBar.currentPage + 1)"
+                       v-if="paginationBar.nextButton != null">Next</a>
+
+                    <!-- pagination list -->
+                    <ul class="pagination-list">
+                        <li v-if="paginationBar.firstButton != null">
+                            <a class="pagination-link"
+                               v-on:click="getPage(1)">1</a>
+                        </li>
+                        <li v-if="paginationBar.firstButton != null">
+                            <span class="pagination-ellipsis">&hellip;</span>
+                        </li>
+
+                        <li v-for="btn in paginationBar.buttonsBar">
+                            <a class="pagination-link"
+                               v-bind:class="isCurrentPage(btn)"
+                               v-on:click="getPage(btn.text)">{{btn.text}}</a>
+                        </li>
+
+                        <li v-if="paginationBar.lastButton != null">
+                            <span class="pagination-ellipsis">&hellip;</span></li>
+                        <li v-if="paginationBar.lastButton != null">
+                            <a class="pagination-link"
+                               v-on:click="getPage(paginationBar.lastButton.text)">{{paginationBar.lastButton.text}}</a>
+                        </li>
+
+                    </ul>
+                </nav>
             </div>
         </main>
     </div>
