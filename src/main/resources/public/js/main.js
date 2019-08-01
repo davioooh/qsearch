@@ -2,7 +2,8 @@ var app = new Vue({
   el: '#app',
   data: {
     pageResult: null,
-    paginationBar: null
+    paginationBar: null,
+    searchKey: null
   },
   computed: {
     isPageVisible: function() { 
@@ -14,27 +15,47 @@ var app = new Vue({
   },
   methods: {
     selectSortCriteria: function(criteria){
-        this.loadFavorites(criteria)
+        this.loadFavorites(
+            criteria,
+            null,
+            null,
+            this.searchKey
+        )
     },
     selectSortDirection: function(dir){
-        this.loadFavorites(this.pageResult.paginationCriteria.sortingCriteria, dir)
+        this.loadFavorites(
+            this.pageResult.paginationCriteria.sortingCriteria,
+            dir,
+            null,
+            this.searchKey
+         )
     },
     getPage: function(pageNum){
         this.loadFavorites(
             this.pageResult.paginationCriteria.sortingCriteria,
             this.pageResult.paginationCriteria.sortingDirection,
-            pageNum
+            pageNum,
+            this.searchKey
+        )
+    },
+    search: function(){
+        this.loadFavorites(
+            null,
+            null,
+            null,
+            this.searchKey
         )
     },
     //
-    loadFavorites: function(sortBy, sortDir, pageNum){
-        alert(sortBy + " ## " + sortDir + " ## " + pageNum)
+    loadFavorites: function(sortBy, sortDir, pageNum, searchKey){
+        // alert(sortBy + " ## " + sortDir + " ## " + pageNum)
         axios
             .get('/ajax/favorites', {
                params: {
                  sortBy: sortBy || 'Activity',
                  sortDir: sortDir || 'Desc',
-                 page: pageNum || 1
+                 page: pageNum || 1,
+                 query : searchKey || ""
                }
             })
             .then(response => {

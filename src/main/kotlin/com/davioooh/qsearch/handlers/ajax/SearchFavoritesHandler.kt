@@ -17,7 +17,7 @@ class SearchFavoritesHandler( // TODO test
             ?: SortingCriteria.Activity
         val sortDir =
             ctx.queryParam("sortDir")?.let { enumValueOrDefault(it, SortingDirection.Desc) } ?: SortingDirection.Desc
-        val query = ctx.queryParam("q") ?: ""
+        val query = ctx.queryParam("query") ?: ""
 
         val pageResult =
             questionsService.searchUserFavorites(

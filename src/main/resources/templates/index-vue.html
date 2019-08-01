@@ -86,16 +86,16 @@
                     </p>
                 </div>
 
-                <!--                <div class="field has-addons">-->
-                <!--                    <p class="control">-->
-                <!--                        <input class="input" type="text" placeholder="Find a question">-->
-                <!--                    </p>-->
-                <!--                    <p class="control">-->
-                <!--                        <button class="button">-->
-                <!--                            Search-->
-                <!--                        </button>-->
-                <!--                    </p>-->
-                <!--                </div>-->
+                <div class="field has-addons">
+                    <p class="control">
+                        <input v-model="searchKey" class="input" type="text" placeholder="Find a question">
+                    </p>
+                    <p class="control">
+                        <button class="button" v-on:click="search">
+                            Search
+                        </button>
+                    </p>
+                </div>
             </div>
 
             <div class="column">
