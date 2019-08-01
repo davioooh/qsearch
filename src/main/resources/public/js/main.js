@@ -1,12 +1,13 @@
 var app = new Vue({
   el: '#app',
   data: {
+    loadCompleted: false,
     pageResult: null,
     paginationBar: null,
     searchKey: null
   },
   computed: {
-    isPageVisible: function() { 
+    isPageEmpty: function() {
       return this.pageResult && this.pageResult.totalItemsCount > 0
     }
   },
@@ -61,6 +62,7 @@ var app = new Vue({
             .then(response => {
               this.pageResult = response.data.pageResult
               this.paginationBar = response.data.paginationBar
+              this.loadCompleted = true
             })
             .catch(error => {
               console.log(error)
