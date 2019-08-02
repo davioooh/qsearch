@@ -120,13 +120,19 @@
                                 <p>{{q.viewCountNice}}</p>
                             </td>
                             <td>
-                                <a v-bind:href="q.link" target="_blank">
-                                    <span class="has-text-weight-semibold">{{q.title}}</span>
-                                    <!--<span class="icon is-small"><i class="fas fa-external-link-alt"></i></span>-->
-                                </a>
+                                <div>
+                                    <a v-bind:href="q.link" target="_blank">
+                                        <span v-html="q.title" class="has-text-weight-semibold">}</span>
+                                        <!--<span class="icon is-small"><i class="fas fa-external-link-alt"></i></span>-->
+                                    </a>
+                                </div>
+                                <div class="tags">
+                                    <span v-for="t in q.tags" class="tag is-primary">{{t}}</span>
+                                </div>
                             </td>
                         </tr>
                     </table>
+
                     <nav class="pagination is-small">
                         <!-- prev/next -->
                         <a class="pagination-previous" disabled v-if="paginationBar.previousButton == null">Previous</a>
