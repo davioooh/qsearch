@@ -8,16 +8,17 @@
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-<section class="section" id="app">
+<section class="section has-shadow">
     <div class="container">
-        <h1 class="title">
-            Q-Search
-        </h1>
+        <h1 class="title"> Q-Search </h1>
         <p class="subtitle">
             Easy search for your favorite <a class="has-text-weight-semibold" href="https://stackoverflow.com/">Stackoverflow</a>
             questions!
         </p>
-
+    </div>
+</section>
+<section class="section" id="app">
+    <div class="container">
         <section v-if="!loadCompleted" class="has-text-info">
             <i class="fas fa-cog fa-spin"></i> Loading...
         </section>
@@ -39,24 +40,54 @@
             <nav v-if="isPageEmpty" class="level">
                 <div class="level-left">
                     <div class="level-item">
-                        <span>Sort by:</span>
-                        <span class="sort-by-item">
-                        <a v-bind:class="isSortCriteriaActive('Activity')"
-                           v-on:click="selectSortCriteria('Activity')">Activity</a>
-                    </span>
-                        <span class="sort-by-item">
-                        <a v-bind:class="isSortCriteriaActive('Vote')"
-                           v-on:click="selectSortCriteria('Vote')">Vote</a>
-                    </span>
-                        <span class="sort-by-item">
-                        <a v-bind:class="isSortCriteriaActive('Asked')"
-                           v-on:click="selectSortCriteria('Asked')">Asked</a>
-                    </span>
-                        <span class="sort-by-item">
-                        <a v-bind:class="isSortCriteriaActive('Views')"
-                           v-on:click="selectSortCriteria('Views')">Views</a>
-                    </span>
+                        <div class="select">
+                            <select>
+                                <option value="Activity">Activity</option>
+                                <option value="Vote">Vote</option>
+                                <option value="Asked">Asked</option>
+                                <option value="Views">Views</option>
+                            </select>
+                        </div>
                     </div>
+                    <div class="level-item">
+                        <div class="field has-addons">
+                            <p class="control">
+                                <a class="button"
+                                   v-bind:class="isSortDirectionActive('Desc')"
+                                   @click="selectSortDirection('Desc')">
+                                    <span class="icon is-small"><i class="fas fa-arrow-down"></i></span>
+                                    <span>Desc</span>
+                                </a>
+                            </p>
+                            <p class="control">
+                                <a class="button"
+                                   v-bind:class="isSortDirectionActive('Asc')"
+                                   @click="selectSortDirection('Asc')">
+                                    <span class="icon is-small"><i class="fas fa-arrow-up"></i></span>
+                                    <span>Asc</span>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <!--                        <span>Sort by:</span>-->
+                    <!--                        <span class="sort-by-item">-->
+                    <!--                        <a v-bind:class="isSortCriteriaActive('Activity')"-->
+                    <!--                           v-on:click="selectSortCriteria('Activity')">Activity</a>-->
+                    <!--                    </span>-->
+                    <!--                        <span class="sort-by-item">-->
+                    <!--                        <a v-bind:class="isSortCriteriaActive('Vote')"-->
+                    <!--                           v-on:click="selectSortCriteria('Vote')">Vote</a>-->
+                    <!--                    </span>-->
+                    <!--                        <span class="sort-by-item">-->
+                    <!--                        <a v-bind:class="isSortCriteriaActive('Asked')"-->
+                    <!--                           v-on:click="selectSortCriteria('Asked')">Asked</a>-->
+                    <!--                    </span>-->
+                    <!--                        <span class="sort-by-item">-->
+                    <!--                        <a v-bind:class="isSortCriteriaActive('Views')"-->
+                    <!--                           v-on:click="selectSortCriteria('Views')">Views</a>-->
+                    <!--                    </span>-->
                 </div>
 
                 <div class="level-right">
@@ -75,29 +106,10 @@
                 <div class="column is-one-quarter">
                     <div class="field has-addons">
                         <p class="control">
-                            <a class="button"
-                               v-bind:class="isSortDirectionActive('Desc')"
-                               v-on:click="selectSortDirection('Desc')">
-                                <span class="icon is-small"><i class="fas fa-angle-down"></i></span>
-                                <span>Desc</span>
-                            </a>
-                        </p>
-                        <p class="control">
-                            <a class="button"
-                               v-bind:class="isSortDirectionActive('Asc')"
-                               v-on:click="selectSortDirection('Asc')">
-                                <span class="icon is-small"><i class="fas fa-angle-up"></i></span>
-                                <span>Asc</span>
-                            </a>
-                        </p>
-                    </div>
-
-                    <div class="field has-addons">
-                        <p class="control">
                             <input v-model="searchKey" class="input" type="text" placeholder="Find a question">
                         </p>
                         <p class="control">
-                            <button class="button" v-on:click="search">
+                            <button class="button" @click="search">
                                 Search
                             </button>
                         </p>
@@ -137,11 +149,11 @@
                     <nav class="pagination is-small">
                         <!-- prev/next -->
                         <a class="pagination-previous" disabled v-if="paginationBar.previousButton == null">Previous</a>
-                        <a class="pagination-previous" v-on:click="getPage(paginationBar.currentPage - 1)"
+                        <a class="pagination-previous" @click="getPage(paginationBar.currentPage - 1)"
                            v-if="paginationBar.previousButton != null">Previous</a>
 
                         <a class="pagination-next" disabled v-if="paginationBar.nextButton == null">Next</a>
-                        <a class="pagination-next" v-on:click="getPage(paginationBar.currentPage + 1)"
+                        <a class="pagination-next" @click="getPage(paginationBar.currentPage + 1)"
                            v-if="paginationBar.nextButton != null">Next</a>
 
                         <!-- pagination list -->
@@ -149,7 +161,7 @@
                             <template v-if="paginationBar.firstButton != null">
                                 <li>
                                     <a class="pagination-link"
-                                       v-on:click="getPage(1)">1</a>
+                                       @click="getPage(1)">1</a>
                                 </li>
                                 <li>
                                     <span class="pagination-ellipsis">&hellip;</span>
@@ -159,7 +171,7 @@
                             <li v-for="btn in paginationBar.buttonsBar">
                                 <a class="pagination-link"
                                    v-bind:class="isCurrentPage(btn)"
-                                   v-on:click="getPage(btn.text)">{{btn.text}}</a>
+                                   @click="getPage(btn.text)">{{btn.text}}</a>
                             </li>
 
                             <template v-if="paginationBar.lastButton != null">
@@ -167,7 +179,7 @@
                                     <span class="pagination-ellipsis">&hellip;</span></li>
                                 <li>
                                     <a class="pagination-link"
-                                       v-on:click="getPage(paginationBar.lastButton.text)">{{paginationBar.lastButton.text}}</a>
+                                       @click="getPage(paginationBar.lastButton.text)">{{paginationBar.lastButton.text}}</a>
                                 </li>
                             </template>
                         </ul>
