@@ -4,6 +4,7 @@ var app = new Vue({
     loadCompleted: false,
     pageResult: null,
     paginationBar: null,
+    sortBy: 'Activity',
     searchKey: null
   },
   computed: {
@@ -14,15 +15,17 @@ var app = new Vue({
   mounted () {
     this.loadFavorites()
   },
-  methods: {
-    selectSortCriteria: function(criteria){
+  watch: {
+    sortBy: function(val){
         this.loadFavorites(
-            criteria,
+            val,
             null,
             null,
             this.searchKey
         )
-    },
+    }
+  },
+  methods: {
     selectSortDirection: function(dir){
         this.loadFavorites(
             this.pageResult.paginationCriteria.sortingCriteria,
@@ -41,8 +44,8 @@ var app = new Vue({
     },
     search: function(){
         this.loadFavorites(
-            null,
-            null,
+            this.pageResult.paginationCriteria.sortingCriteria,
+            this.pageResult.paginationCriteria.sortingDirection,
             null,
             this.searchKey
         )
@@ -67,10 +70,6 @@ var app = new Vue({
             .catch(error => {
               console.log(error)
             })
-    },
-    isSortCriteriaActive: function (criteria) {
-      var active = this.pageResult ? this.pageResult.paginationCriteria.sortingCriteria == criteria : false
-      return {"has-text-weight-semibold" : active }
     },
     isSortDirectionActive: function(dir) {
       var active = this.pageResult ? this.pageResult.paginationCriteria.sortingDirection == dir : false

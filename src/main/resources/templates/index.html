@@ -10,7 +10,7 @@
 <body>
 <section class="section has-shadow">
     <div class="container">
-        <h1 class="title"> Q-Search </h1>
+        <h1 class="title"><a href="/">Q-Search</a></h1>
         <p class="subtitle">
             Easy search for your favorite <a class="has-text-weight-semibold" href="https://stackoverflow.com/">Stackoverflow</a>
             questions!
@@ -41,7 +41,7 @@
                 <div class="level-left">
                     <div class="level-item">
                         <div class="select">
-                            <select>
+                            <select v-model="sortBy">
                                 <option value="Activity">Activity</option>
                                 <option value="Vote">Vote</option>
                                 <option value="Asked">Asked</option>
@@ -69,25 +69,6 @@
                             </p>
                         </div>
                     </div>
-
-
-                    <!--                        <span>Sort by:</span>-->
-                    <!--                        <span class="sort-by-item">-->
-                    <!--                        <a v-bind:class="isSortCriteriaActive('Activity')"-->
-                    <!--                           v-on:click="selectSortCriteria('Activity')">Activity</a>-->
-                    <!--                    </span>-->
-                    <!--                        <span class="sort-by-item">-->
-                    <!--                        <a v-bind:class="isSortCriteriaActive('Vote')"-->
-                    <!--                           v-on:click="selectSortCriteria('Vote')">Vote</a>-->
-                    <!--                    </span>-->
-                    <!--                        <span class="sort-by-item">-->
-                    <!--                        <a v-bind:class="isSortCriteriaActive('Asked')"-->
-                    <!--                           v-on:click="selectSortCriteria('Asked')">Asked</a>-->
-                    <!--                    </span>-->
-                    <!--                        <span class="sort-by-item">-->
-                    <!--                        <a v-bind:class="isSortCriteriaActive('Views')"-->
-                    <!--                           v-on:click="selectSortCriteria('Views')">Views</a>-->
-                    <!--                    </span>-->
                 </div>
 
                 <div class="level-right">
@@ -96,7 +77,7 @@
                         <span v-if="pageResult.filteredItemsCount < pageResult.totalItemsCount">
                             Showing <span>{{pageResult.filteredItemsCount}}</span> of
                         </span>
-                            <strong>{{pageResult.totalItemsCount}}</strong> questions
+                            <a @click="loadFavorites"><strong>{{pageResult.totalItemsCount}}</strong> questions</a>
                         </p>
                     </div>
                 </div>
@@ -109,7 +90,7 @@
                             <input v-model="searchKey" class="input" type="text" placeholder="Find a question">
                         </p>
                         <p class="control">
-                            <button class="button" @click="search">
+                            <button class="button" @click="search" @keyup.enter="search"><!--FIXME enter not woring -->
                                 Search
                             </button>
                         </p>
