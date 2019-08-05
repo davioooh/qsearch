@@ -120,8 +120,17 @@
                                         <i class="fas fa-external-link-alt"></i>
                                     </a>
                                 </div>
-                                <div class="tags">
-                                    <span v-for="t in q.tags" class="tag is-primary">{{t}}</span>
+                                <div class="level">
+                                    <div class="level-left">
+                                        <div class="tags level-item">
+                                            <span v-for="t in q.tags" class="tag is-primary">{{t}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="level-right">
+                                        <div class="level-item is-size-7 has-text-grey-light">
+                                            Last activity: {{q.lastActivityDate}}
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
