@@ -1,6 +1,7 @@
 package com.davioooh.qsearch.services
 
-import com.davioooh.qsearch.stackexchange.api.model.Question
+import com.davioooh.qsearch.model.QuestionDetails
+import com.davioooh.qsearch.model.toQuestionDetailsList
 import kotlin.math.ceil
 
 data class PaginationCriteria(
@@ -19,7 +20,7 @@ data class PageResult<T>(
 fun buildPage(
     questions: Questions,
     paginationCriteria: PaginationCriteria
-): PageResult<Question> {
+): PageResult<QuestionDetails> {
     require(questions.isNotEmpty()) { "questions can't be an empty list" }
     require(paginationCriteria.page > 0) { "paginationCriteria.page must be greater than 0" }
     require(paginationCriteria.pageSize > 0) { "paginationCriteria.pageSize must be greater than 0" }
@@ -32,7 +33,7 @@ fun buildPage(
     )
 
     return PageResult(
-        sQuestions.chunked(paginationCriteria.pageSize)[paginationCriteria.page - 1],
+        sQuestions.chunked(paginationCriteria.pageSize)[paginationCriteria.page - 1].toQuestionDetailsList(),
         sQuestions.size,
         paginationCriteria
     )

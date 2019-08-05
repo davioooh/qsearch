@@ -2,16 +2,14 @@ package com.davioooh.qsearch.services
 
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 
-//val Question.answerCountNice: String
-//    get() = this.answerCount.toNiceString()
-//val Question.viewCountNice: String
-//    get() = this.viewCount.toNiceString()
-//val Question.scoreNice: String
-//    get() = this.score.toNiceString()
-
 val questionsDecimalFormat = DecimalFormat("#.#", DecimalFormatSymbols(Locale.US))
+val questionsDateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("MMM dd, ''yy 'at' HH:mm 'UTC'")
 
 fun Int.toNiceString(): String {
     return when {
@@ -20,3 +18,8 @@ fun Int.toNiceString(): String {
         else -> this.toString()
     }
 }
+
+fun Long.toLocalDateTime(): LocalDateTime =
+    LocalDateTime.ofInstant(Instant.ofEpochSecond(this), ZoneId.of("UTC"))
+
+fun LocalDateTime.toNiceString(): String = questionsDateFormat.format(this)

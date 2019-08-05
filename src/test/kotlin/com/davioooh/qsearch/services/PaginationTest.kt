@@ -1,5 +1,6 @@
 package com.davioooh.qsearch.services
 
+import com.davioooh.qsearch.model.toQuestionDetailsList
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Nested
@@ -58,7 +59,7 @@ internal class PaginationTest {
         @Test
         fun `returns page correctly`() {
             val expectedResult = PageResult(
-                questions.subList(3, 6),
+                questions.subList(3, 6).toQuestionDetailsList(),
                 questions.size,
                 PaginationCriteria(2, 3)
             )

@@ -1,6 +1,5 @@
 package com.davioooh.qsearch.stackexchange.api.model
 
-import com.davioooh.qsearch.services.toNiceString
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Question(
@@ -18,8 +17,4 @@ data class Question(
     @JsonProperty("tags") val tags: List<String>,
     @JsonProperty("title") val title: String,
     @JsonProperty("view_count") val viewCount: Int
-) {
-    val answerCountNice = answerCount.toNiceString()
-    val viewCountNice = viewCount.toNiceString()
-    val scoreNice = score.toNiceString()
-}
+)

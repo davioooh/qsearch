@@ -2,6 +2,7 @@ package com.davioooh.qsearch.services
 
 import com.davioooh.qsearch.caching.CacheFacade
 import com.davioooh.qsearch.caching.QuestionsWrapper
+import com.davioooh.qsearch.model.QuestionDetails
 import com.davioooh.qsearch.stackexchange.api.QuestionsApi
 import com.davioooh.qsearch.stackexchange.api.model.Question
 import org.slf4j.LoggerFactory
@@ -62,7 +63,7 @@ class QuestionsService(
         accessToken: String,
         paginationCriteria: PaginationCriteria,
         searchCriteria: SearchCriteria
-    ): SearchPageResult<Question>? {
+    ): SearchPageResult<QuestionDetails>? {
         val allQuestions = fetchAllFavorites(accessToken, userId)
 
         if (allQuestions.isEmpty()) return null
@@ -73,7 +74,10 @@ class QuestionsService(
 
         val filteredPageResult =
             if (filteredQuestions.isEmpty()) PageResult(listOf(), 0, paginationCriteria)
-            else buildPage(filteredQuestions, paginationCriteria)
+            else buildPage(
+                filteredQuestions,
+                paginationCriteria
+            )
 
         return SearchPageResult(filteredPageResult, allQuestions.size, searchCriteria)
     }

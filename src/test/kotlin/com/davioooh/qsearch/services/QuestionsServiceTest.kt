@@ -3,6 +3,7 @@ package com.davioooh.qsearch.services
 import com.davioooh.qsearch.authentication.authenticatedUser
 import com.davioooh.qsearch.caching.CacheFacade
 import com.davioooh.qsearch.caching.QuestionsWrapper
+import com.davioooh.qsearch.model.toQuestionDetailsList
 import com.davioooh.qsearch.stackexchange.api.QuestionsApi
 import com.davioooh.qsearch.stackexchange.api.model.ResultWrapper
 import io.mockk.clearAllMocks
@@ -60,7 +61,7 @@ internal class QuestionsServiceTest {
                 SearchPageResult(
                     PageResult(
                         if (filteredItems.isNotEmpty())
-                            filteredItems.chunked(pageConfig.pageSize)[pageConfig.page - 1]
+                            filteredItems.chunked(pageConfig.pageSize)[pageConfig.page - 1].toQuestionDetailsList()
                         else
                             listOf(),
                         filteredItems.size,
