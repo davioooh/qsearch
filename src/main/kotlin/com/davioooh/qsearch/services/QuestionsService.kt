@@ -82,7 +82,10 @@ class QuestionsService(
         return questions
     }
 
-    private fun filterQuestionsByCriteria(questions: Questions, searchCriteria: SearchCriteria): Questions {
+    private fun filterQuestionsByCriteria(
+        questions: Questions,
+        searchCriteria: SearchCriteria
+    ): Questions { // TODO test
         val qids = searchCriteria.key?.let { textSearchIndex.search(it) } ?: listOf()
         val textFilteredQ = questions.filter { qids.contains(it.questionId) }
 

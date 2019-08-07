@@ -5,7 +5,7 @@ data class SearchCriteria(
     val tags: List<String>? = null
 ) {
     val hasValues
-        get() = (key?.isNotBlank() ?: false) && (tags?.isNotEmpty() ?: false)
+        get() = (key?.isNotBlank() ?: false) || (tags?.isNotEmpty() ?: false)
 }
 
 data class SearchPageResult<T>(
