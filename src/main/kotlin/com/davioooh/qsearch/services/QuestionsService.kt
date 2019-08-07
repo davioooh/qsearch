@@ -14,6 +14,30 @@ class QuestionsService(
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
+    fun searchUserFavorites(
+        userId: Int,
+        accessToken: String,
+        paginationCriteria: PaginationCriteria,
+        searchCriteria: SearchCriteria
+    ): SearchPageResult<QuestionDetails>? {
+        val allQuestions = fetchAllFavorites(accessToken, userId)
+
+        if (allQuestions.isEmpty()) return null
+
+        val filteredQuestions =
+            if (searchCriteria.hasValues) filterQuestionsByCriteria(allQuestions, searchCriteria)
+            else allQuestions
+
+        val filteredPageResult =
+            if (filteredQuestions.isEmpty()) PageResult(listOf(), 0, paginationCriteria)
+            else buildPage(
+                filteredQuestions,
+                paginationCriteria
+            )
+
+        return SearchPageResult(filteredPageResult, allQuestions.size, searchCriteria)
+    }
+
     private fun fetchAllFavorites(accessToken: String, userId: Int): Questions {
         var questions = cache.get(accessToken)?.questions ?: listOf()
         if (questions.isEmpty()) {
@@ -58,33 +82,15 @@ class QuestionsService(
         return questions
     }
 
-    fun searchUserFavorites(
-        userId: Int,
-        accessToken: String,
-        paginationCriteria: PaginationCriteria,
+    private fun filterQuestionsByCriteria(
+        questions: Questions,
         searchCriteria: SearchCriteria
-    ): SearchPageResult<QuestionDetails>? {
-        val allQuestions = fetchAllFavorites(accessToken, userId)
+    ): Questions { // TODO test
+        val qids = searchCriteria.key?.let { textSearchIndex.search(it) } ?: listOf()
+        val textFilteredQ = questions.filter { qids.contains(it.questionId) }
 
-        if (allQuestions.isEmpty()) return null
-
-        val filteredQuestions =
-            if (searchCriteria.isClear) allQuestions
-            else filterQuestionsByCriteria(allQuestions, searchCriteria)
-
-        val filteredPageResult =
-            if (filteredQuestions.isEmpty()) PageResult(listOf(), 0, paginationCriteria)
-            else buildPage(
-                filteredQuestions,
-                paginationCriteria
-            )
-
-        return SearchPageResult(filteredPageResult, allQuestions.size, searchCriteria)
-    }
-
-    private fun filterQuestionsByCriteria(questions: Questions, searchCriteria: SearchCriteria): Questions {
-        val qids = textSearchIndex.search(searchCriteria.key)
-        return questions.filter { qids.contains(it.questionId) }
-        // TODO add other search criteria
+        return searchCriteria.tags?.let { selectedTags ->
+            textFilteredQ.filter { q -> q.tags.any { it in selectedTags } }
+        } ?: textFilteredQ
     }
 }
