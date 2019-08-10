@@ -2,10 +2,10 @@ package com.davioooh.qsearch.services
 
 data class SearchCriteria(
     val key: String? = null,
-    val tags: List<String>? = null
+    val tags: List<String> = listOf()
 ) {
     val hasValues
-        get() = (key?.isNotBlank() ?: false) || (tags?.isNotEmpty() ?: false)
+        get() = (key?.isNotBlank() ?: false) || tags.isNotEmpty()
 }
 
 data class SearchPageResult<T>(
