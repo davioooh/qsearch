@@ -87,10 +87,11 @@
                 <div class="column is-one-quarter">
                     <div class="field has-addons">
                         <p class="control">
-                            <input v-model="searchKey" class="input" type="text" placeholder="Find a question">
+                            <input v-model="searchKey" class="input" type="text" placeholder="Find a question"
+                                   @keyup.enter="search">
                         </p>
                         <p class="control">
-                            <button class="button" @click="search" @keyup.enter="search"><!--FIXME enter not woring -->
+                            <button class="button" @click="search">
                                 Search
                             </button>
                         </p>
