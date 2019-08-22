@@ -48,7 +48,6 @@ internal class QuestionsServiceTest {
         every { cache.get(any()) } returns null
         every { searchIndex.search(any()) } returns filteredItems.map { it.questionId }
 
-
         val result = userFavoritesService.searchUserFavorites(
             authenticatedUser.userId,
             authenticatedUser.accessToken,

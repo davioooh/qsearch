@@ -89,8 +89,10 @@ class QuestionsService(
         val qids = searchCriteria.key?.let { textSearchIndex.search(it) } ?: listOf()
         val textFilteredQ = questions.filter { qids.contains(it.questionId) }
 
-        return searchCriteria.tags?.let { selectedTags ->
-            textFilteredQ.filter { q -> q.tags.any { it in selectedTags } }
-        } ?: textFilteredQ
+        return searchCriteria.tags
+            .takeIf { it.isNotEmpty() }
+            ?.let { selectedTags ->
+                textFilteredQ.filter { q -> q.tags.any { it in selectedTags } }
+            } ?: textFilteredQ
     }
 }
