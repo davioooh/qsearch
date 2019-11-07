@@ -7,11 +7,15 @@ import com.davioooh.qsearch.utils.toFormEncoded
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.javalin.http.Context
+import org.slf4j.LoggerFactory
+import java.security.GeneralSecurityException
 
 class CookieAccessTokenPersistence(
     private val objectMapper: ObjectMapper,
     private val tokenEncryption: TokenEncryption = NoopEncryption()
 ) : AccessTokenPersistence {
+    private val logger = LoggerFactory.getLogger(javaClass)
+
     override fun persist(ctx: Context, accessTokenDetails: AccessTokenDetails) {
         ctx.cookie(
             ACCESS_TOKEN_COOKIE_NAME,
@@ -20,10 +24,15 @@ class CookieAccessTokenPersistence(
     }
 
     override fun retrieve(ctx: Context): AccessTokenDetails? =
-        ctx.cookie(ACCESS_TOKEN_COOKIE_NAME)?.let { encodedToken ->
-            tokenEncryption.decrypt(encodedToken.fromFormEncoded()).let { decodedToken ->
-                objectMapper.readValue<AccessTokenDetails>(decodedToken)
+        try {
+            ctx.cookie(ACCESS_TOKEN_COOKIE_NAME)?.let { encodedToken ->
+                tokenEncryption.decrypt(encodedToken.fromFormEncoded()).let { decodedToken ->
+                    objectMapper.readValue<AccessTokenDetails>(decodedToken)
+                }
             }
+        } catch (ex: GeneralSecurityException) {
+            logger.error("Cannot retrieve access token", ex)
+            null
         }
 
     companion object {
