@@ -2,6 +2,7 @@ package com.davioooh.qsearch.config
 
 val SERVER_PORT: Int? = System.getenv("PORT")?.toInt()
 val ENCRYPTION_KEY: String = System.getenv("ENCRYPTION_KEY")
+val GA_CODE: String = System.getenv("GA_CODE")
 
 val SO_API_KEY: String = System.getenv("SO_API_KEY")
 val SO_API_CLIENT_ID: String = System.getenv("SO_API_CLIENT_ID")
