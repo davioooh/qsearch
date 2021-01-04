@@ -6,7 +6,7 @@
 
     <groupId>com.davioooh.qsearch</groupId>
     <artifactId>qsearch</artifactId>
-    <version>0.3.5</version>
+    <version>0.3.6</version>
     <packaging>jar</packaging>
 
     <properties>
