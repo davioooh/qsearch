@@ -6,18 +6,6 @@
     <title>Q-Search - A simple search tool for your favorite Stack Overflow questions!</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/main.css">
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-            var code = /*[[${gaCode}]]*/ null;
-        /*]]>*/
-    </script>
-    <script async th:src="@{https://www.googletagmanager.com/gtag/js(id=${gaCode})}"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', code);
-    </script>
 </head>
 <body>
 <section class="section has-shadow">
