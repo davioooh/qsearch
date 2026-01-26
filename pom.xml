@@ -25,7 +25,7 @@
 
         <!-- test -->
         <junit.version>5.4.2</junit.version>
-        <assertj.version>3.11.1</assertj.version>
+        <assertj.version>3.27.7</assertj.version>
         <mockk.version>1.9.3.kotlin12</mockk.version>
     </properties>
 
