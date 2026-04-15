@@ -16,7 +16,7 @@
         <kotlin.code.style>official</kotlin.code.style>
 
         <javalin.version>3.3.0</javalin.version>
-        <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
+        <thymeleaf.version>3.1.4.RELEASE</thymeleaf.version>
         <slf4j-simple.version>1.7.26</slf4j-simple.version>
         <jackson.version>2.10.0</jackson.version>
         <fuel.version>2.1.0</fuel.version>
